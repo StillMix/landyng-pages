@@ -1,0 +1,25 @@
+:root {
+  --bg-primary: linear-gradient(45deg, #e0eafc 0%, #cfdef3 100%);
+  --bg-secondary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+
+  --mark-one: #4a6cf7;
+
+  --button-primary: #7c78d3;
+  --button-border: #434071;
+  --button-active: #004494;
+  --button-hover: #0056b3;
+
+  --text-title: #000;
+  --text-main: #2c3e50;
+  --text-secondary: #ffffff;
+  --text-other: rgba(255,255,255,0.7);
+  --text-numbers: linear-gradient(90deg, #9b2be5, #6600ff);
+  --text-footer: #9b2be5;
+}
+
+@mixin glass{
+    background: rgba(255, 255, 255, 0.404);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
