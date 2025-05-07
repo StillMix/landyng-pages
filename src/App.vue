@@ -5,14 +5,15 @@
 </template>
 
 <script setup lang="ts">
-import page from './pages/MainPage.vue';
+import page from './pages/MainPage.vue'
 </script>
 
 <style lang="scss">
-  body{
-    margin: 0;
-  }
-  * {
-    /*outline: 1px solid red; /* Подсветит ВСЕ элементы */
+body {
+  overflow-x: hidden;
+  margin: 0;
+}
+* {
+  /*outline: 1px solid red; /* Подсветит ВСЕ элементы */
 }
 </style>

@@ -23,10 +23,6 @@ defineProps({
     type: [String, Number],
     default: 21,
   },
-  fill: {
-    type: String,
-    default: 'none',
-  },
   pathFill: {
     type: String,
     default: 'white',

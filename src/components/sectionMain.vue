@@ -2,7 +2,7 @@
   <div
     class="section-main"
     :style="{
-      backgroundImage: `url(${backgroundImage})`,
+      backgroundImage: `url(${currentBackground})`,
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
     }"
@@ -20,23 +20,47 @@
 </template>
 
 <script setup lang="ts">
-import backgroundImage from '@/assets/images/SectionMainImg1.png'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import backgroundImage1 from '@/assets/images/SectionMainImg1.png'
+import backgroundImage2 from '@/assets/images/SectionMainImg2.png'
+import backgroundImage3 from '@/assets/images/SectionMainImg3.png'
 import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
+
+const backgrounds = [backgroundImage1, backgroundImage2, backgroundImage3]
+const currentBackground = ref(backgrounds[0])
+let currentIndex = 0
+let intervalId: number | null = null
+
+const changeBackground = () => {
+  currentIndex = (currentIndex + 1) % backgrounds.length
+  currentBackground.value = backgrounds[currentIndex]
+}
+
+onMounted(() => {
+  intervalId = setInterval(changeBackground, 10000) as unknown as number
+})
+
+onBeforeUnmount(() => {
+  if (intervalId !== null) {
+    clearInterval(intervalId)
+  }
+})
 </script>
 
 <style lang="scss" scoped>
 .section {
   &-main {
     overflow: hidden;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     position: relative;
     display: flex;
     align-items: center;
+    transition: background-image 1.5s ease-in-out;
     &__overlay {
       z-index: 0;
       position: absolute;
-      width: 100vw;
+      width: 100%;
       height: 100vh;
       top: 0;
       left: 0;

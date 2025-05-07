@@ -8,6 +8,14 @@
   --section-main-overlay: linear-gradient(270deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 100%);
   --width-text-main: 686px;
 
+  --section-number-icon-size: 31px;
+  --section-number-height: 735px;
+  --font-size-number-subtitle: 40px;
+  --width-number-subtitle: 672px;
+
+  --section-subtitle-top: 24px;
+  --section-title-top: 98px;
+  --section-title-weight: 700;
   --section-title-size: 29px;
   --section-gray-color: #94a3b8;
   --section-white-color: #fff;
@@ -24,6 +32,11 @@
   --bg-light-section: linear-gradient(135deg, #f5f7fa 0%, #e8ecf2 100%);
   --bg-dark-section: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
   --all-box-shadow: 0 4px 18px 2px rgba(0, 0, 0, 0.1);
+
+  --scrollbar-width: 8px;
+  --scrollbar-track-color: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
+  --scrollbar-thumb-color: rgba(59, 130, 246, 0.5); /* Используем цвет кнопок */
+  --scrollbar-thumb-hover-color: rgba(59, 130, 246, 0.8);
 }
 
 * {
@@ -48,4 +61,63 @@ textarea,
   -webkit-user-select: text !important;
   -moz-user-select: text !important;
   -ms-user-select: text !important;
+}
+
+/* Стилизация для Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+}
+
+/* Стилизация для WebKit/Blink (Chrome, Safari, новые версии Edge) */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
+}
+
+/* Скрываем полосу прокрутки в IE, Edge и Firefox при сохранении функциональности */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* для IE и Edge */
+  scrollbar-width: none; /* для Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* для Chrome, Safari и Opera */
+}
+
+.section-title-dark {
+  color: var(--section-white-color);
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  margin-top: var(--section-title-top);
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 4px;
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 86px;
+    height: 2px;
+    background-color: #3b82f6;
+  }
 }
