@@ -8,17 +8,25 @@
   --section-main-overlay: linear-gradient(270deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 100%);
   --width-text-main: 686px;
 
+  --section-number-card-height: 309px;
+  --section-number-card-width: 222px;
+  --section-number-top-card: 91px;
+  --section-number-gap-card: 48px;
   --section-number-icon-size: 31px;
   --section-number-height: 735px;
   --font-size-number-subtitle: 40px;
   --width-number-subtitle: 672px;
 
+  --section-prezentation-height: 942px;
+
+  --section-width-blocks: 1032px;
   --section-subtitle-top: 24px;
   --section-title-top: 98px;
   --section-title-weight: 700;
   --section-title-size: 29px;
   --section-gray-color: #94a3b8;
   --section-white-color: #fff;
+  --section-black-color: #000;
 
   --btn-image-color: #3b82f6;
   --btn-border-radius: 4px;
@@ -101,6 +109,29 @@ textarea,
 
 .section-title-dark {
   color: var(--section-white-color);
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  margin-top: var(--section-title-top);
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 4px;
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 86px;
+    height: 2px;
+    background-color: #3b82f6;
+  }
+}
+
+.section-title-light {
+  color: var(--section-black-color);
   font-size: var(--section-title-size);
   font-weight: var(--section-title-weight);
   margin-top: var(--section-title-top);
