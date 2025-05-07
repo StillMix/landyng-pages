@@ -1,9 +1,9 @@
 <template>
   <div class="section-prezentation">
     <p class="section-title-light">ПРЕЗЕНТАЦИЯ</p>
-    <div class="pdf-container">
-      <div class="pdf-header">
-        <div class="pdf-title">Презентация компании</div>
+    <div class="presentation-container">
+      <div class="presentation-header">
+        <div class="presentation-title">Презентация компании</div>
         <button class="btn download-btn" @click="downloadPdf">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -24,148 +24,108 @@
         </button>
       </div>
 
-      <div class="pdf-content">
-        <div class="pdf-page" ref="pdfPageRef">
-          <div class="page-placeholder" v-if="!pdfLoaded">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="80"
-              height="80"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#3b82f6"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <line x1="10" y1="9" x2="8" y2="9"></line>
-            </svg>
-            <p style="margin-top: 15px">Загрузка PDF презентации...</p>
+      <div class="presentation-content">
+        <!-- Вариант 1: Предпросмотр с изображением (статический, надежный способ) -->
+        <div v-if="displayMode === 'preview'" class="preview-mode">
+          <div class="preview-image">
+            <img :src="previewImageSrc" alt="Превью презентации" />
+            <div class="preview-overlay">
+              <button class="btn view-btn" @click="switchToEmbed">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  width="24"
+                  height="24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+                Просмотреть онлайн
+              </button>
+            </div>
           </div>
-          <canvas ref="pdfCanvas" v-if="pdfLoaded"></canvas>
-        </div>
-        <div class="pdf-progress" :style="{ width: progressWidth + '%' }"></div>
-      </div>
-
-      <div class="pdf-controls">
-        <div class="page-nav">
-          <button class="btn btn-icon" @click="goToFirstPage" :disabled="currentPage <= 1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <button class="btn btn-icon" @click="goToPrevPage" :disabled="currentPage <= 1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <button class="btn btn-icon" @click="goToNextPage" :disabled="currentPage >= numPages">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-          <button class="btn btn-icon" @click="goToLastPage" :disabled="currentPage >= numPages">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 5l7 7-7 7M5 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+          <div class="preview-description">
+            <h3>О презентации</h3>
+            <p>
+              Данная презентация содержит подробную информацию о нашей компании, предоставляемых
+              услугах и успешно реализованных проектах.
+            </p>
+            <p>Вы можете скачать презентацию, нажав кнопку "Скачать PDF" или просмотреть онлайн.</p>
+            <div class="preview-details">
+              <div class="preview-detail"><strong>Формат:</strong> PDF</div>
+              <div class="preview-detail"><strong>Размер:</strong> 2.4 МБ</div>
+              <div class="preview-detail"><strong>Страниц:</strong> 12</div>
+              <div class="preview-detail"><strong>Обновлено:</strong> 15.04.2025</div>
+            </div>
+          </div>
         </div>
 
-        <div class="pdf-page-counter">
-          Страница <span id="current-page">{{ currentPage }}</span> из
-          <span id="total-pages">{{ numPages }}</span>
-        </div>
-
-        <div class="zoom-controls">
-          <button class="btn btn-icon" @click="zoomOut" :disabled="scale <= 0.5">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"
-              />
-            </svg>
-          </button>
-          <button class="btn btn-icon" @click="zoomIn" :disabled="scale >= 2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
-              />
-            </svg>
-          </button>
-          <button class="btn btn-icon" @click="resetZoom">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-          </button>
+        <!-- Вариант 2: Встроенный PDF через тег object (встроенный просмотрщик) -->
+        <div v-if="displayMode === 'embed'" class="embed-mode">
+          <object
+            :data="pdfSrc"
+            type="application/pdf"
+            width="100%"
+            height="600px"
+            class="pdf-object"
+          >
+            <div class="fallback-message">
+              <p>
+                Ваш браузер не поддерживает встроенные PDF. Пожалуйста,
+                <a :href="pdfSrc" target="_blank">скачайте PDF</a> чтобы просмотреть его.
+              </p>
+            </div>
+          </object>
+          <div class="embed-controls">
+            <button class="btn back-btn" @click="switchToPreview">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                width="20"
+                height="20"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+              Вернуться к обзору
+            </button>
+            <a :href="pdfSrc" target="_blank" class="btn open-btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                width="20"
+                height="20"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+              Открыть в новой вкладке
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -173,138 +133,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-import * as pdfjsLib from 'pdfjs-dist'
+import { ref } from 'vue'
 
-// Инициализация PDF.js
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
+// Импортируем изображение предпросмотра и PDF
+// Замените на фактические пути к вашим файлам
+const previewImageSrc = '/src/assets/images/presentation-preview.jpg'
+const pdfSrc = '/src/assets/pdf/PresONR.pdf'
 
-// Путь к PDF файлу
-const pdfUrl = '../assets/pdf/PresONR.pdf'
+// Управление режимом отображения
+const displayMode = ref<'preview' | 'embed'>('preview')
 
-// Состояние PDF документа
-const pdfDoc = ref(null)
-const pdfLoaded = ref(false)
-const numPages = ref(0)
-const currentPage = ref(1)
-const scale = ref(1)
-const progressWidth = ref(0)
-
-// DOM-элементы
-const pdfCanvas = ref<HTMLCanvasElement | null>(null)
-const pdfPageRef = ref<HTMLDivElement | null>(null)
-
-// Загрузка PDF
-const loadPDF = async () => {
-  try {
-    // Загружаем и парсим PDF
-    const loadingTask = pdfjsLib.getDocument(pdfUrl)
-    pdfDoc.value = await loadingTask.promise
-    numPages.value = pdfDoc.value.numPages
-    pdfLoaded.value = true
-
-    // Отображаем первую страницу после загрузки
-    await renderPage(currentPage.value)
-  } catch (error) {
-    console.error('Ошибка загрузки PDF:', error)
-  }
+const switchToEmbed = () => {
+  displayMode.value = 'embed'
 }
 
-// Рендеринг страницы
-const renderPage = async (pageNum: number) => {
-  if (!pdfDoc.value || !pdfCanvas.value) return
-
-  try {
-    const page = await pdfDoc.value.getPage(pageNum)
-    const viewport = page.getViewport({ scale: scale.value })
-
-    // Устанавливаем размеры canvas
-    const canvas = pdfCanvas.value
-    const context = canvas.getContext('2d')
-
-    if (!context) return
-
-    canvas.height = viewport.height
-    canvas.width = viewport.width
-
-    // Рендерим PDF страницу в canvas
-    const renderContext = {
-      canvasContext: context,
-      viewport: viewport,
-    }
-
-    await page.render(renderContext).promise
-
-    // Обновляем индикатор прогресса
-    progressWidth.value = (currentPage.value / numPages.value) * 100
-  } catch (error) {
-    console.error('Ошибка рендеринга страницы:', error)
-  }
+const switchToPreview = () => {
+  displayMode.value = 'preview'
 }
 
-// Навигация по страницам
-const goToPrevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--
-  }
-}
-
-const goToNextPage = () => {
-  if (currentPage.value < numPages.value) {
-    currentPage.value++
-  }
-}
-
-const goToFirstPage = () => {
-  currentPage.value = 1
-}
-
-const goToLastPage = () => {
-  currentPage.value = numPages.value
-}
-
-// Управление масштабом
-const zoomIn = () => {
-  if (scale.value < 2) {
-    scale.value += 0.25
-  }
-}
-
-const zoomOut = () => {
-  if (scale.value > 0.5) {
-    scale.value -= 0.25
-  }
-}
-
-const resetZoom = () => {
-  scale.value = 1
-}
-
-// Скачивание PDF
+// Функция скачивания PDF
 const downloadPdf = () => {
   const link = document.createElement('a')
-  link.href = pdfUrl
+  link.href = pdfSrc
   link.download = 'Презентация_компании.pdf'
   link.target = '_blank'
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
 }
-
-// Наблюдатели за изменениями
-watch(currentPage, () => {
-  renderPage(currentPage.value)
-})
-
-watch(scale, () => {
-  renderPage(currentPage.value)
-})
-
-// Инициализация при монтировании компонента
-onMounted(() => {
-  loadPDF()
-})
 </script>
 
 <style lang="scss" scoped>
@@ -318,13 +174,12 @@ onMounted(() => {
   }
 }
 
-.pdf-container {
+.presentation-container {
   margin-left: auto;
   margin-right: auto;
   margin-top: 59px;
   width: 1032px;
-  height: 652px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf2 100%);
+  background: #fff;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -332,7 +187,7 @@ onMounted(() => {
   flex-direction: column;
 }
 
-.pdf-header {
+.presentation-header {
   height: 60px;
   background: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
   color: white;
@@ -342,49 +197,116 @@ onMounted(() => {
   padding: 0 20px;
 }
 
-.pdf-title {
+.presentation-title {
   font-size: 18px;
   font-weight: 600;
 }
 
-.pdf-content {
-  flex: 1;
+.presentation-content {
+  padding: 0;
+  background: #f8fafc;
+}
+
+/* Стили для режима предпросмотра */
+.preview-mode {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 600px;
+}
+
+.preview-image {
+  width: 60%;
   position: relative;
-  padding: 20px;
-  overflow: auto;
-}
-
-.pdf-page {
-  background: #fff;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  min-width: 640px;
-  min-height: 480px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-  transition: transform 0.3s ease;
   overflow: hidden;
-}
-
-.page-placeholder {
-  color: #777;
-  font-size: 24px;
-  text-align: center;
-}
-
-.pdf-controls {
-  height: 70px;
+  background: #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preview-image:hover .preview-overlay {
+  opacity: 1;
+}
+
+.preview-description {
+  width: 40%;
+  padding: 30px;
+  background: white;
+}
+
+.preview-description h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.preview-description p {
+  margin-bottom: 15px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.preview-details {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.preview-detail {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.preview-detail strong {
+  color: #334155;
+}
+
+/* Стили для режима встроенного просмотра */
+.embed-mode {
+  width: 100%;
+}
+
+.pdf-object {
+  border: none;
+}
+
+.embed-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+}
+
+.fallback-message {
+  padding: 30px;
+  text-align: center;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Кнопки */
 .btn {
   background: #3b82f6;
   color: white;
@@ -397,6 +319,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
+  text-decoration: none;
 }
 
 .btn:hover {
@@ -407,37 +330,6 @@ onMounted(() => {
   transform: translateY(1px);
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn-icon {
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.pdf-page-counter {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 14px;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-  margin: 0 15px;
-}
-
 .download-btn {
   background: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
 }
@@ -446,30 +338,29 @@ onMounted(() => {
   background: #0f172a;
 }
 
-.zoom-controls {
-  display: flex;
-  gap: 10px;
-  margin-left: auto;
+.view-btn {
+  padding: 12px 20px;
+  font-size: 16px;
 }
 
-.page-nav {
-  display: flex;
-  gap: 10px;
-  margin-right: auto;
+.back-btn,
+.open-btn {
+  padding: 8px 15px;
 }
 
-.pdf-progress {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  background: #3b82f6;
-  width: 30%;
-  transition: width 0.3s ease;
+.back-btn {
+  background: #64748b;
 }
 
-canvas {
-  max-width: 100%;
-  height: auto;
+.back-btn:hover {
+  background: #475569;
+}
+
+.open-btn {
+  background: #0f172a;
+}
+
+.open-btn:hover {
+  background: #1e293b;
 }
 </style>
