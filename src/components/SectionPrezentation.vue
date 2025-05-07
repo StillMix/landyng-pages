@@ -4,7 +4,7 @@
     <div class="pdf-container">
       <div class="pdf-header">
         <div class="pdf-title">Презентация компании</div>
-        <button class="btn download-btn">
+        <button class="btn download-btn" @click="downloadPdf">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -25,8 +25,8 @@
       </div>
 
       <div class="pdf-content">
-        <div class="pdf-page">
-          <div class="page-placeholder">
+        <div class="pdf-page" ref="pdfPageRef">
+          <div class="page-placeholder" v-if="!pdfLoaded">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="80"
@@ -44,15 +44,16 @@
               <line x1="16" y1="17" x2="8" y2="17"></line>
               <line x1="10" y1="9" x2="8" y2="9"></line>
             </svg>
-            <p style="margin-top: 15px">Ваша PDF презентация</p>
+            <p style="margin-top: 15px">Загрузка PDF презентации...</p>
           </div>
+          <canvas ref="pdfCanvas" v-if="pdfLoaded"></canvas>
         </div>
-        <div class="pdf-progress"></div>
+        <div class="pdf-progress" :style="{ width: progressWidth + '%' }"></div>
       </div>
 
       <div class="pdf-controls">
         <div class="page-nav">
-          <button class="btn btn-icon">
+          <button class="btn btn-icon" @click="goToFirstPage" :disabled="currentPage <= 1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -67,7 +68,7 @@
               />
             </svg>
           </button>
-          <button class="btn btn-icon">
+          <button class="btn btn-icon" @click="goToPrevPage" :disabled="currentPage <= 1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -82,7 +83,7 @@
               />
             </svg>
           </button>
-          <button class="btn btn-icon">
+          <button class="btn btn-icon" @click="goToNextPage" :disabled="currentPage >= numPages">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -97,7 +98,7 @@
               />
             </svg>
           </button>
-          <button class="btn btn-icon">
+          <button class="btn btn-icon" @click="goToLastPage" :disabled="currentPage >= numPages">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -115,11 +116,12 @@
         </div>
 
         <div class="pdf-page-counter">
-          Страница <span id="current-page">1</span> из <span id="total-pages">12</span>
+          Страница <span id="current-page">{{ currentPage }}</span> из
+          <span id="total-pages">{{ numPages }}</span>
         </div>
 
         <div class="zoom-controls">
-          <button class="btn btn-icon">
+          <button class="btn btn-icon" @click="zoomOut" :disabled="scale <= 0.5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -134,7 +136,7 @@
               />
             </svg>
           </button>
-          <button class="btn btn-icon">
+          <button class="btn btn-icon" @click="zoomIn" :disabled="scale >= 2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -149,7 +151,7 @@
               />
             </svg>
           </button>
-          <button class="btn btn-icon">
+          <button class="btn btn-icon" @click="resetZoom">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -170,7 +172,140 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
+import * as pdfjsLib from 'pdfjs-dist'
+
+// Инициализация PDF.js
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
+
+// Путь к PDF файлу
+const pdfUrl = '../assets/pdf/PresONR.pdf'
+
+// Состояние PDF документа
+const pdfDoc = ref(null)
+const pdfLoaded = ref(false)
+const numPages = ref(0)
+const currentPage = ref(1)
+const scale = ref(1)
+const progressWidth = ref(0)
+
+// DOM-элементы
+const pdfCanvas = ref<HTMLCanvasElement | null>(null)
+const pdfPageRef = ref<HTMLDivElement | null>(null)
+
+// Загрузка PDF
+const loadPDF = async () => {
+  try {
+    // Загружаем и парсим PDF
+    const loadingTask = pdfjsLib.getDocument(pdfUrl)
+    pdfDoc.value = await loadingTask.promise
+    numPages.value = pdfDoc.value.numPages
+    pdfLoaded.value = true
+
+    // Отображаем первую страницу после загрузки
+    await renderPage(currentPage.value)
+  } catch (error) {
+    console.error('Ошибка загрузки PDF:', error)
+  }
+}
+
+// Рендеринг страницы
+const renderPage = async (pageNum: number) => {
+  if (!pdfDoc.value || !pdfCanvas.value) return
+
+  try {
+    const page = await pdfDoc.value.getPage(pageNum)
+    const viewport = page.getViewport({ scale: scale.value })
+
+    // Устанавливаем размеры canvas
+    const canvas = pdfCanvas.value
+    const context = canvas.getContext('2d')
+
+    if (!context) return
+
+    canvas.height = viewport.height
+    canvas.width = viewport.width
+
+    // Рендерим PDF страницу в canvas
+    const renderContext = {
+      canvasContext: context,
+      viewport: viewport,
+    }
+
+    await page.render(renderContext).promise
+
+    // Обновляем индикатор прогресса
+    progressWidth.value = (currentPage.value / numPages.value) * 100
+  } catch (error) {
+    console.error('Ошибка рендеринга страницы:', error)
+  }
+}
+
+// Навигация по страницам
+const goToPrevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
+const goToNextPage = () => {
+  if (currentPage.value < numPages.value) {
+    currentPage.value++
+  }
+}
+
+const goToFirstPage = () => {
+  currentPage.value = 1
+}
+
+const goToLastPage = () => {
+  currentPage.value = numPages.value
+}
+
+// Управление масштабом
+const zoomIn = () => {
+  if (scale.value < 2) {
+    scale.value += 0.25
+  }
+}
+
+const zoomOut = () => {
+  if (scale.value > 0.5) {
+    scale.value -= 0.25
+  }
+}
+
+const resetZoom = () => {
+  scale.value = 1
+}
+
+// Скачивание PDF
+const downloadPdf = () => {
+  const link = document.createElement('a')
+  link.href = pdfUrl
+  link.download = 'Презентация_компании.pdf'
+  link.target = '_blank'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+// Наблюдатели за изменениями
+watch(currentPage, () => {
+  renderPage(currentPage.value)
+})
+
+watch(scale, () => {
+  renderPage(currentPage.value)
+})
+
+// Инициализация при монтировании компонента
+onMounted(() => {
+  loadPDF()
+})
+</script>
 
 <style lang="scss" scoped>
 .section {
@@ -219,18 +354,20 @@
   align-items: center;
   position: relative;
   padding: 20px;
+  overflow: auto;
 }
 
 .pdf-page {
   background: #fff;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  width: 640px;
-  height: 480px;
+  min-width: 640px;
+  min-height: 480px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
   transition: transform 0.3s ease;
+  overflow: hidden;
 }
 
 .page-placeholder {
@@ -268,6 +405,12 @@
 
 .btn:active {
   transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-icon {
@@ -323,5 +466,10 @@
   background: #3b82f6;
   width: 30%;
   transition: width 0.3s ease;
+}
+
+canvas {
+  max-width: 100%;
+  height: auto;
 }
 </style>
