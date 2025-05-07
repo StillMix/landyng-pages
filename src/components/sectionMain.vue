@@ -12,8 +12,8 @@
       <p class="section-main__text--title">Мы создаем надежные решения для Вас и Вашей компании</p>
       <p class="section-main__text--subtitle">Мы и есть надежное решение Ваших задач!</p>
       <div class="section-main__text--btn">
-        <AppButon />
-        <AppButon />
+        <AppButton blue>Наши решения <ArrowOneLine /></AppButton>
+        <AppButton white text="Связаться с нами" />
       </div>
     </div>
   </div>
@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import backgroundImage from '@/assets/images/SectionMainImg1.png'
+import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
 </script>
 
 <style lang="scss" scoped>
@@ -44,6 +45,7 @@ import backgroundImage from '@/assets/images/SectionMainImg1.png'
     &__text {
       width: var(--width-text-main);
       z-index: 1;
+      margin-left: var(--section-main-text-left);
       &--title {
         font-weight: var(--font-weight-400);
         font-size: var(--font-size-main-title);
@@ -55,6 +57,11 @@ import backgroundImage from '@/assets/images/SectionMainImg1.png'
         font-size: var(--font-size-main-subtitle);
         font-family: var(--font-family);
         color: var(--font-color-main-subtitle);
+      }
+      &--btn {
+        margin-top: var(--section-main-btn-top);
+        display: flex;
+        gap: var(--section-main-gap);
       }
     }
   }

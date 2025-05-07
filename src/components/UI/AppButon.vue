@@ -1,6 +1,8 @@
 <template>
   <button :type="type" :class="[{ fullwidth }, { blue }, { white }]" @click="handleClick">
-    <slot>{{ text }}</slot>
+    <span class="button-content">
+      <slot>{{ text }}</slot>
+    </span>
   </button>
 </template>
 
@@ -41,11 +43,12 @@ const handleClick = (event: MouseEvent) => {
 
 <style scoped lang="scss">
 button {
+  font-size: var(--font-size-17);
   padding: var(--btn-padding);
-  border-radius: 4px;
+  border-radius: var(--btn-border-radius);
   cursor: pointer;
   font-family: var(--font-family);
-  font-weight: 500;
+  font-weight: var(--font-weight-400);
   border: none;
   outline: none;
   transition: all 0.3s ease;
@@ -57,6 +60,12 @@ button {
   &:active {
     transform: translateY(1px);
   }
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .fullwidth {
