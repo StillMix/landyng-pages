@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import page from './pages/page.vue';
+import page from './pages/MainPage.vue';
 </script>
 
 <style lang="scss">
