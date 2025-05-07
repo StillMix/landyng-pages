@@ -1,267 +1,3 @@
-<style lang="scss" scoped>
-.section {
-  &-prezentation {
-    overflow: hidden;
-    width: 100vw;
-    height: var(--section-prezentation-height);
-    background: var(--bg-light-section);
-    position: relative;
-  }
-}
-
-.presentation-container {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 59px;
-  width: 1032px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.presentation-header {
-  height: 60px;
-  background: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-}
-
-.presentation-title {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.presentation-content {
-  padding: 0;
-  background: #f8fafc;
-}
-
-/* Стили для режима предпросмотра */
-.preview-mode {
-  display: flex;
-  min-height: 600px;
-}
-
-.preview-image {
-  width: 60%;
-  position: relative;
-  overflow: hidden;
-  background: #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.preview-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.preview-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 23, 42, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.preview-image:hover .preview-overlay {
-  opacity: 1;
-}
-
-.preview-description {
-  width: 40%;
-  padding: 30px;
-  background: white;
-}
-
-.preview-description h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 20px;
-  color: #0f172a;
-}
-
-.preview-description p {
-  margin-bottom: 15px;
-  color: #475569;
-  line-height: 1.5;
-}
-
-.preview-details {
-  margin-top: 30px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.preview-detail {
-  font-size: 14px;
-  color: #64748b;
-}
-
-.preview-detail strong {
-  color: #334155;
-}
-
-/* Стили для режима встроенного просмотра */
-.embed-mode {
-  width: 100%;
-}
-
-.pdf-container {
-  width: 100%;
-  height: 600px;
-  background: #f1f5f9;
-  overflow: auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  position: relative;
-}
-
-.loading-message {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 16px;
-  color: #64748b;
-}
-
-.pdf-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  gap: 15px;
-}
-
-.page-info {
-  font-size: 14px;
-  color: #475569;
-  margin: 0 10px;
-}
-
-.ctrl-btn {
-  background: #e2e8f0;
-  border: none;
-  border-radius: 4px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.ctrl-btn:hover:not(:disabled) {
-  background: #cbd5e1;
-}
-
-.ctrl-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pdf-object {
-  border: none;
-}
-
-.fallback-link {
-  color: #3b82f6;
-  text-decoration: underline;
-}
-
-.fallback-link:hover {
-  text-decoration: none;
-}
-
-.embed-controls {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 20px;
-  background: #f1f5f9;
-  border-top: 1px solid #e2e8f0;
-}
-
-/* Кнопки */
-.btn {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 15px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-  text-decoration: none;
-}
-
-.btn:hover {
-  background: #2563eb;
-}
-
-.btn:active {
-  transform: translateY(1px);
-}
-
-.download-btn {
-  background: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
-}
-
-.download-btn:hover {
-  background: #0f172a;
-}
-
-.view-btn {
-  padding: 12px 20px;
-  font-size: 16px;
-}
-
-.back-btn,
-.open-btn {
-  padding: 8px 15px;
-}
-
-.back-btn {
-  background: #64748b;
-}
-
-.back-btn:hover {
-  background: #475569;
-}
-
-.open-btn {
-  background: #0f172a;
-}
-
-.open-btn:hover {
-  background: #1e293b;
-}
-</style>
-onMounted(() => { // Импортируем локальный worker при монтировании компонента
-import('pdfjs-dist/build/pdf.worker.entry') .then((worker) => {
-pdfjsLib.GlobalWorkerOptions.workerSrc = worker.default; }); })
 <template>
   <div class="section-prezentation">
     <p class="section-title-light">ПРЕЗЕНТАЦИЯ</p>
@@ -458,21 +194,15 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = worker.default; }); })
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, watch } from 'vue'
-import * as pdfjsLib from 'pdfjs-dist'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import previewImageSrc from '@/assets/images/presentation-preview.jpg'
-// Будем использовать локальный воркер вместо CDN
-// Настроим путь к воркеру при монтировании компонента
 
-// Путь к PDF-файлу - проверьте, что этот путь корректен
-// Если файл находится в публичной директории
+// Путь к скачанной библиотеке PDF.js
+const pdfjsLib = window.pdfjsLib
+const pdfjsWorkerSrc = '/pdfjs/build/pdf.worker.js'
+
+// Путь к PDF-файлу
 const pdfSrc = '/assets/pdf/PresONR.pdf'
-
-// Если у вас возникают проблемы с путем, можете попробовать один из этих вариантов:
-// 1. Для файлов в публичной директории: '/pdf/PresONR.pdf'
-// 2. Для файлов в директории src, используйте импорт:
-// import pdfFile from '@/assets/pdf/PresONR.pdf'
-// const pdfSrc = pdfFile
 
 // Управление режимом отображения
 const displayMode = ref<'preview' | 'embed'>('preview')
@@ -486,9 +216,23 @@ const pageCount = ref(0)
 const currentPage = ref(1)
 let currentScale = 1.0
 
+// Инициализация PDF.js
+onMounted(() => {
+  // Загрузка необходимых скриптов
+  const script = document.createElement('script')
+  script.src = '/pdfjs/build/pdf.js'
+  script.onload = () => {
+    // После загрузки основного скрипта установим путь к воркеру
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerSrc
+    }
+  }
+  document.head.appendChild(script)
+})
+
 // Функция для рендеринга страницы PDF
 const renderPage = async (pageNum: number) => {
-  if (!pdfDoc || !pdfCanvas.value) return
+  if (!pdfDoc || !pdfCanvas.value || !window.pdfjsLib) return
 
   const page = await pdfDoc.getPage(pageNum)
   const viewport = page.getViewport({ scale: currentScale })
@@ -511,8 +255,15 @@ const loadPdf = async () => {
   try {
     loading.value = true
 
-    // Используем правильный путь для загрузки PDF
-    const loadingTask = pdfjsLib.getDocument(pdfSrc)
+    // Проверяем, загружена ли библиотека
+    if (!window.pdfjsLib) {
+      console.error('PDF.js не загружен')
+      loading.value = false
+      return
+    }
+
+    // Загружаем PDF
+    const loadingTask = window.pdfjsLib.getDocument(pdfSrc)
     pdfDoc = await loadingTask.promise
 
     pageCount.value = pdfDoc.numPages
@@ -526,7 +277,7 @@ const loadPdf = async () => {
   }
 }
 
-// Навигация по страницам
+// Остальной код без изменений
 const prevPage = async () => {
   if (currentPage.value <= 1) return
   currentPage.value--
@@ -539,7 +290,6 @@ const nextPage = async () => {
   await renderPage(currentPage.value)
 }
 
-// Масштабирование
 const zoomIn = async () => {
   currentScale += 0.25
   await renderPage(currentPage.value)
