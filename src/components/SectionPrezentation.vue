@@ -194,15 +194,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onUnmounted, watch } from 'vue'
 import previewImageSrc from '@/assets/images/presentation-preview.jpg'
 
-// Путь к скачанной библиотеке PDF.js
-const pdfjsLib = window.pdfjsLib
-const pdfjsWorkerSrc = '/pdfjs/build/pdf.worker.js'
-
 // Путь к PDF-файлу
-const pdfSrc = '/assets/pdf/PresONR.pdf'
+const pdfSrc = '/src/assets/pdf/PresONR.pdf'
+const pdfjsWorkerSrc = '/pdfjs/build/pdf.worker.mjs'
 
 // Управление режимом отображения
 const displayMode = ref<'preview' | 'embed'>('preview')
@@ -215,20 +212,6 @@ let pdfDoc: any = null
 const pageCount = ref(0)
 const currentPage = ref(1)
 let currentScale = 1.0
-
-// Инициализация PDF.js
-onMounted(() => {
-  // Загрузка необходимых скриптов
-  const script = document.createElement('script')
-  script.src = '/pdfjs/build/pdf.js'
-  script.onload = () => {
-    // После загрузки основного скрипта установим путь к воркеру
-    if (window.pdfjsLib) {
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerSrc
-    }
-  }
-  document.head.appendChild(script)
-})
 
 // Функция для рендеринга страницы PDF
 const renderPage = async (pageNum: number) => {
@@ -262,6 +245,9 @@ const loadPdf = async () => {
       return
     }
 
+    // Настраиваем путь к воркеру
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerSrc
+
     // Загружаем PDF
     const loadingTask = window.pdfjsLib.getDocument(pdfSrc)
     pdfDoc = await loadingTask.promise
@@ -277,7 +263,7 @@ const loadPdf = async () => {
   }
 }
 
-// Остальной код без изменений
+// Функции навигации по страницам
 const prevPage = async () => {
   if (currentPage.value <= 1) return
   currentPage.value--
