@@ -87,14 +87,20 @@
             </button>
           </div>
           <div class="presentation-content__controls-btncontainer">
-            <button @click="zoomOut" class="presentation-content__controls-btncontainer__zoomin">
+            <button
+              @click="zoomOut"
+              class="presentation-content__controls-btncontainer__zoomin control-button"
+            >
               <ZoomOut :width="20" :height="20" fill="white" />
             </button>
-            <button @click="zoomIn" class="presentation-content__controls-btncontainer__zoomout">
+            <button
+              @click="zoomIn"
+              class="presentation-content__controls-btncontainer__zoomout control-button"
+            >
               <ZoomIn :width="20" :height="20" fill="white" />
             </button>
             <a :href="pdfSrc" target="_blank">
-              <button class="presentation-content__controls-btncontainer__newpage">
+              <button class="presentation-content__controls-btncontainer__newpage control-button">
                 <NewPageIcon :width="20" :height="20" fill="white" />
               </button>
             </a>
@@ -142,6 +148,7 @@ const lineWidthPercentage = computed(() => {
   return Math.round(percentage)
 })
 const targetHeight = 470
+
 const renderPage = async (pageNum: number) => {
   if (!pdfDoc || !pdfCanvas.value || !window.pdfjsLib) return
 
@@ -158,6 +165,18 @@ const renderPage = async (pageNum: number) => {
 
   const canvas = pdfCanvas.value
   const context = canvas.getContext('2d')
+
+  // Добавляем класс для анимации
+  canvas.classList.add('page-transition')
+
+  // Создаем эффект выхода для текущей страницы
+  canvas.style.opacity = '0'
+  canvas.style.transform = 'scale(0.97)'
+
+  // Короткая пауза для визуализации эффекта выхода
+  await new Promise((resolve) => setTimeout(resolve, 150))
+
+  // Устанавливаем новые размеры
   canvas.height = viewport.height
   canvas.width = viewport.width
 
@@ -166,7 +185,18 @@ const renderPage = async (pageNum: number) => {
     viewport: viewport,
   }
 
+  // Настраиваем анимацию входа для новой страницы
+  canvas.style.transform = 'scale(1.03)'
+
   await page.render(renderContext).promise
+
+  // Плавно показываем новую страницу с эффектом входа
+  setTimeout(() => {
+    if (canvas) {
+      canvas.style.opacity = '1'
+      canvas.style.transform = 'scale(1)'
+    }
+  }, 50)
 }
 
 // Загрузка PDF документа
@@ -198,11 +228,13 @@ const loadPdf = async () => {
     loading.value = false
   }
 }
+
 const onePage = async () => {
   if (currentPage.value <= 1) return
   currentPage.value = 1
   await renderPage(currentPage.value)
 }
+
 // Функции навигации по страницам
 const prevPage = async () => {
   if (currentPage.value <= 1) return
@@ -223,13 +255,50 @@ const latestPage = async () => {
 }
 
 const zoomIn = async () => {
+  // Сохраняем предыдущий масштаб для анимации
+  const prevScale = currentScale
+
+  // Устанавливаем новый масштаб
   currentScale += 0.25
+
+  // Получаем canvas
+  const canvas = pdfCanvas.value
+  if (canvas) {
+    // Добавляем плавную анимацию масштабирования
+    canvas.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease'
+    canvas.style.opacity = '0.7'
+    canvas.style.transform = `scale(${prevScale / currentScale})`
+
+    // Короткая пауза для визуализации эффекта
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
+
+  // Рендерим страницу с новым масштабом
   await renderPage(currentPage.value)
 }
 
 const zoomOut = async () => {
   if (currentScale <= 0.5) return
+
+  // Сохраняем предыдущий масштаб для анимации
+  const prevScale = currentScale
+
+  // Устанавливаем новый масштаб
   currentScale -= 0.25
+
+  // Получаем canvas
+  const canvas = pdfCanvas.value
+  if (canvas) {
+    // Добавляем плавную анимацию масштабирования
+    canvas.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease'
+    canvas.style.opacity = '0.7'
+    canvas.style.transform = `scale(${prevScale / currentScale})`
+
+    // Короткая пауза для визуализации эффекта
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
+
+  // Рендерим страницу с новым масштабом
   await renderPage(currentPage.value)
 }
 
@@ -266,6 +335,46 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+/* Базовая анимация для всех переходов */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Добавляем общие переходы для всех элементов */
+* {
+  transition: all 0.3s ease;
+}
+
+/* Контрольные кнопки с общими стилями */
+.control-button {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    background: #2563eb !important;
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    transform: translateY(0);
+    box-shadow: none;
+    background: rgba(59, 130, 246, 0.7) !important;
+    cursor: not-allowed;
+  }
+}
+
 .section {
   &-prezentation {
     overflow: hidden;
@@ -289,6 +398,14 @@ onUnmounted(() => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition:
+    box-shadow 0.4s ease,
+    transform 0.4s ease;
+
+  &:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
 }
 
 .presentation-content {
@@ -297,6 +414,7 @@ onUnmounted(() => {
     display: flex;
     height: 100%;
     flex-shrink: 0;
+    animation: fadeIn 0.5s ease-in-out;
     &-img {
       flex-shrink: 0;
       object-fit: cover;
@@ -311,9 +429,15 @@ onUnmounted(() => {
         width: 100%;
         height: 100%;
         object-fit: contain;
+        transition: transform 0.5s ease;
       }
-      &:hover .presentation-content__preview-overlay {
-        opacity: 1;
+      &:hover {
+        img {
+          transform: scale(1.03);
+        }
+        .presentation-content__preview-overlay {
+          opacity: 1;
+        }
       }
     }
     &-overlay {
@@ -327,7 +451,9 @@ onUnmounted(() => {
       align-items: center;
       justify-content: center;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition:
+        opacity 0.4s ease,
+        background 0.3s ease;
       &__btn {
         background: #3b82f6;
         color: white;
@@ -339,15 +465,22 @@ onUnmounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.2s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-decoration: none;
         padding: 12px 20px;
         font-size: 16px;
+        transform: translateY(0);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
         &:hover {
           background: #2563eb;
+          transform: translateY(-3px);
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
         }
-        &::after {
-          transform: translateY(1px);
+
+        &:active {
+          transform: translateY(-1px);
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
       }
     }
@@ -355,16 +488,19 @@ onUnmounted(() => {
       width: 40%;
       padding: 30px;
       background: white;
+      transition: background-color 0.3s ease;
       h3 {
         margin-top: 0;
         margin-bottom: 20px;
         font-size: 20px;
         color: #0f172a;
+        transition: color 0.3s ease;
       }
       p {
         margin-bottom: 15px;
         color: #475569;
         line-height: 1.5;
+        transition: color 0.3s ease;
       }
       &__detalis {
         margin-top: 30px;
@@ -375,6 +511,11 @@ onUnmounted(() => {
       &__detali {
         font-size: 14px;
         color: #64748b;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: #3b82f6;
+        }
       }
     }
   }
@@ -386,16 +527,22 @@ onUnmounted(() => {
     justify-content: space-between;
     align-items: center;
     padding: 0px 19px;
+    transition: padding 0.3s ease;
+    animation: fadeIn 0.5s ease-in-out;
     &-title {
       font-family: var(--font-family);
       font-weight: 400;
       font-size: 18px;
       line-height: 89%;
       color: #fff;
+      transition:
+        font-size 0.3s ease,
+        color 0.3s ease;
     }
   }
   &__embed {
     width: 100%;
+    animation: fadeIn 0.5s ease-in-out;
     &-container {
       width: 100%;
       height: 522px;
@@ -405,6 +552,7 @@ onUnmounted(() => {
       justify-content: center;
       align-items: flex-start;
       position: relative;
+      transition: background 0.3s ease;
       &__loading {
         position: absolute;
         top: 50%;
@@ -412,11 +560,16 @@ onUnmounted(() => {
         transform: translate(-50%, -50%);
         font-size: 16px;
         color: #64748b;
+        animation: pulse 1.5s infinite ease-in-out;
       }
       &__canvas {
         margin: 20px auto;
         display: block;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease,
+          box-shadow 0.4s ease;
       }
     }
   }
@@ -431,18 +584,45 @@ onUnmounted(() => {
     justify-content: space-between;
     align-items: center;
     padding: 0px 10px;
+    animation: fadeIn 0.5s ease-in-out;
     &-line {
-      width: 86px;
+      width: 0;
       height: 3px;
       background-color: #3b82f6;
       position: absolute;
       top: -3px;
       left: 0;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
     &-btncontainer {
       display: flex;
       gap: 10px;
-      &__one {
+      transition: gap 0.3s ease;
+      &__one,
+      &__prev,
+      &__next,
+      &__latest,
+      &__zoomin,
+      &__zoomout,
+      &__newpage {
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+          background: #2563eb !important;
+        }
+
+        &:active {
+          transform: translateY(0);
+          box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          transform: translateY(0);
+          box-shadow: none;
+          background: rgba(59, 130, 246, 0.7) !important;
+          cursor: not-allowed;
+        }
         width: 42px;
         height: 42px;
         display: flex;
@@ -450,64 +630,122 @@ onUnmounted(() => {
         justify-content: center;
         background: #3b82f6;
         border-radius: 3px;
+        cursor: pointer;
+        border: none;
+        outline: none;
       }
       &__prev {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         transform: rotate(180deg);
-        background: #3b82f6;
-        border-radius: 3px;
-      }
-      &__next {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #3b82f6;
-        border-radius: 3px;
+        &:hover {
+          transform: rotate(180deg) translateY(2px);
+        }
+
+        &:active {
+          transform: rotate(180deg) translateY(0);
+        }
+        &:disabled {
+          transform: rotate(180deg) translateY(0);
+        }
       }
       &__latest {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         transform: rotate(180deg);
-        background: #3b82f6;
-        border-radius: 3px;
-      }
-      &__zoomin {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #3b82f6;
-        border-radius: 3px;
-      }
-      &__zoomout {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #3b82f6;
-        border-radius: 3px;
-      }
-      &__newpage {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #3b82f6;
-        border-radius: 3px;
+        &:hover {
+          transform: rotate(180deg) translateY(2px);
+        }
+
+        &:active {
+          transform: rotate(180deg) translateY(0);
+        }
+        &:disabled {
+          transform: rotate(180deg) translateY(0);
+        }
       }
     }
+  }
+}
+
+/* Пульсирующая анимация для загрузки */
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+}
+
+/* Анимация перехода страниц */
+.page-transition {
+  transition:
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s ease;
+}
+
+/* Эффект тени для текущей страницы */
+.presentation-content__embed-container__canvas {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Плавная анимация при переключении между режимами */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Анимация слайда для переключения страниц */
+@keyframes slideFromRight {
+  from {
+    transform: translateX(30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromLeft {
+  from {
+    transform: translateX(-30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Анимация масштабирования */
+@keyframes zoomIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 </style>
