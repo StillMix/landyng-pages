@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-interface PDFDocumentProxy {
+export interface PDFDocumentProxy {
   numPages: number
   getPage: (pageNumber: number) => Promise<PDFPageProxy>
   destroy: () => void

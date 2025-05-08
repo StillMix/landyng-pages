@@ -52,7 +52,10 @@
           </div>
         </div>
         <div v-if="displayMode === 'embed'" class="presentation-content__controls">
-          <div class="presentation-content__controls-line"></div>
+          <div
+            class="presentation-content__controls-line"
+            :style="{ width: lineWidthPercentage + '%' }"
+          ></div>
           <div class="presentation-content__controls-btncontainer">
             <button
               @click="onePage"
@@ -103,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, watch } from 'vue'
+import { ref, onUnmounted, watch, computed } from 'vue'
 import previewImageSrc from '@/assets/images/presentation-preview.jpg'
 import AppButon from './UI/AppButon.vue'
 import DownloadIcon from '@/assets/icons/DownloadIcon.vue'
@@ -113,7 +116,7 @@ import ArrowNext from '@/assets/icons/ArrowNext.vue'
 import ZoomOut from '@/assets/icons/ZoomOut.vue'
 import ZoomIn from '@/assets/icons/ZoomIn.vue'
 import NewPageIcon from '@/assets/icons/NewPageIcon.vue'
-
+import type { PDFDocumentProxy } from '@/types/pdf'
 // Путь к PDF-файлу
 const pdfSrc = '/src/assets/pdf/PresONR.pdf'
 const pdfjsWorkerSrc = '/pdfjs/build/pdf.worker.mjs'
@@ -125,17 +128,33 @@ const pdfCanvas = ref<HTMLCanvasElement | null>(null)
 const loading = ref(true)
 
 // PDF состояние
-let pdfDoc: any = null
+let pdfDoc: PDFDocumentProxy | null = null
 const pageCount = ref(0)
 const currentPage = ref(1)
 let currentScale = 1.0
+const lineWidthPercentage = computed(() => {
+  if (pageCount.value <= 1) return 0
 
-// Функция для рендеринга страницы PDF
+  // Вычисляем процент прогресса (0% для первой страницы, 100% для последней)
+  const percentage = ((currentPage.value - 1) / (pageCount.value - 1)) * 100
+
+  // Округляем до целого числа
+  return Math.round(percentage)
+})
+const targetHeight = 470
 const renderPage = async (pageNum: number) => {
   if (!pdfDoc || !pdfCanvas.value || !window.pdfjsLib) return
 
   const page = await pdfDoc.getPage(pageNum)
-  const viewport = page.getViewport({ scale: currentScale })
+
+  // Получаем viewport с масштабом 1.0 для определения исходных размеров
+  const originalViewport = page.getViewport({ scale: 1.0 })
+
+  // Вычисляем новый масштаб на основе целевой высоты
+  const scaleFactor = targetHeight / originalViewport.height
+
+  // Применяем вычисленный масштаб
+  const viewport = page.getViewport({ scale: scaleFactor * currentScale })
 
   const canvas = pdfCanvas.value
   const context = canvas.getContext('2d')
