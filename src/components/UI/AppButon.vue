@@ -1,5 +1,5 @@
 <template>
-  <button :type="type" :class="[{ fullwidth }, { blue }, { white }]" @click="handleClick">
+  <button :type="type" :class="[{ fullwidth }, { blue }, { white }, { dark }]" @click="handleClick">
     <span class="button-content">
       <slot>{{ text }}</slot>
     </span>
@@ -15,6 +15,10 @@ defineProps({
     default: false,
   },
   white: {
+    type: Boolean,
+    default: false,
+  },
+  dark: {
     type: Boolean,
     default: false,
   },
@@ -81,5 +85,9 @@ button {
   background-color: transparent;
   color: var(--section-white-color, #fff);
   border: 1px solid var(--section-white-color, #fff);
+}
+.dark {
+  background: linear-gradient(133deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
+  color: var(--section-white-color);
 }
 </style>
