@@ -47,8 +47,9 @@
 <script setup lang="ts"></script>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/styles.scss';
 .section-companes {
-  @extend .section-light;
+  @include section-light;
   height: var(--section-companes-height);
 
   &__marquee {

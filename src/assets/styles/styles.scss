@@ -149,20 +149,92 @@ textarea,
 }
 
 /* Common section styles */
-.section-base {
+@mixin section-base {
   width: var(--section-width);
   position: relative;
   overflow: hidden;
 }
 
-.section-light {
-  @extend .section-base;
+@mixin section-light {
+  @include section-base;
   background: var(--bg-light-section);
 }
 
-.section-dark {
-  @extend .section-base;
+@mixin section-dark {
+  @include section-base;
   background: var(--bg-dark-section);
+}
+
+@mixin card-base {
+  border-radius: 12px;
+  box-shadow: var(--all-box-shadow);
+}
+
+@mixin card-light {
+  @include card-base;
+  background: #fff;
+}
+
+@mixin card-dark {
+  @include card-base;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border-light);
+}
+
+@mixin icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+}
+
+@mixin icon-container-primary {
+  @include icon-container;
+  background: rgba(59, 130, 246, 0.14);
+}
+
+@mixin icon-container-light {
+  @include icon-container;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@mixin button-base {
+  font-size: var(--font-size-17);
+  padding: var(--btn-padding);
+  border-radius: var(--btn-border-radius);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-400);
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+@mixin button-blue {
+  @include button-base;
+  background-color: var(--btn-image-color);
+  color: var(--section-white-color);
+}
+
+@mixin button-white {
+  @include button-base;
+  background-color: transparent;
+  color: var(--section-white-color);
+  border: 1px solid var(--section-white-color);
+}
+
+@mixin button-dark {
+  @include button-base;
+  background: linear-gradient(133deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
+  color: var(--section-white-color);
 }
 
 /* Section title styles */
@@ -211,40 +283,7 @@ textarea,
   width: var(--section-content-width);
 }
 
-/* Common card styles */
-.card-base {
-  border-radius: 12px;
-  box-shadow: var(--all-box-shadow);
-}
-
-.card-light {
-  @extend .card-base;
-  background: #fff;
-}
-
-.card-dark {
-  @extend .card-base;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--color-border-light);
-}
-
 /* Common icon container */
-.icon-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 100px;
-}
-
-.icon-container-primary {
-  @extend .icon-container;
-  background: rgba(59, 130, 246, 0.14);
-}
-
-.icon-container-light {
-  @extend .icon-container;
-  background: rgba(255, 255, 255, 0.1);
-}
 
 /* Common content container */
 .content-container {
@@ -254,44 +293,6 @@ textarea,
 }
 
 /* Button styles */
-.button-base {
-  font-size: var(--font-size-17);
-  padding: var(--btn-padding);
-  border-radius: var(--btn-border-radius);
-  cursor: pointer;
-  font-family: var(--font-family);
-  font-weight: var(--font-weight-400);
-  border: none;
-  outline: none;
-  transition: all 0.3s ease;
-
-  &:hover {
-    opacity: 0.9;
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
-}
-
-.button-blue {
-  @extend .button-base;
-  background-color: var(--btn-image-color);
-  color: var(--section-white-color);
-}
-
-.button-white {
-  @extend .button-base;
-  background-color: transparent;
-  color: var(--section-white-color);
-  border: 1px solid var(--section-white-color);
-}
-
-.button-dark {
-  @extend .button-base;
-  background: linear-gradient(133deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
-  color: var(--section-white-color);
-}
 
 /* Animation keyframes */
 @keyframes fadeIn {

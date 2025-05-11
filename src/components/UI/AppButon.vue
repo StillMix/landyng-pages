@@ -46,17 +46,18 @@ const handleClick = (event: MouseEvent) => {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/styles.css';
 button {
   &.blue {
-    @extend .button-blue;
+    @include button-blue;
   }
 
   &.white {
-    @extend .button-white;
+    @include button-white;
   }
 
   &.dark {
-    @extend .button-dark;
+    @include button-dark;
   }
 }
 

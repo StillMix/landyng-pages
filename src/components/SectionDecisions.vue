@@ -7,9 +7,10 @@
 <script setup lang="ts"></script>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/styles.scss';
 .section {
   &-decisions {
-    @extend .section-dark;
+    @include section-dark;
     height: var(--section-decisions-height);
   }
 }

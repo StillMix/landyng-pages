@@ -45,9 +45,10 @@ import RealeseProjectIcon from '@/assets/icons/RealeseProjectIcon.vue'
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/styles.scss';
 .section {
   &-number {
-    @extend .section-dark;
+    @include section-dark;
     height: var(--section-number-height);
 
     &__subtitle {
@@ -71,7 +72,7 @@ import RealeseProjectIcon from '@/assets/icons/RealeseProjectIcon.vue'
       margin-top: var(--section-number-top-card);
 
       &-card {
-        @extend .card-dark;
+        @include card-dark;
         flex-shrink: 0;
         display: flex;
         flex-direction: column;

@@ -92,9 +92,10 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/styles.scss';
 .section {
   &-contact {
-    @extend .section-dark;
+    @include section-dark;
     height: var(--section-contact-height);
     flex-direction: column;
 
@@ -151,7 +152,7 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
             gap: 13px;
 
             &__img {
-              @extend .icon-container-light;
+              @include icon-container-light;
               flex-shrink: 0;
               width: 40px;
               height: 40px;
