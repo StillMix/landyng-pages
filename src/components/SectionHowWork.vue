@@ -1,6 +1,5 @@
 <template>
-  <div class="section-howWork">
-    <p class="section-title-light">Как мы работаем</p>
+  <AppSection id="section-numbers" title="Как мы работаем" theme="light">
     <div class="section-howWork-cards">
       <div class="section-howWork-cards-left">
         <div class="section-howWork-cards-left-card">
@@ -11,8 +10,9 @@
             <p class="section-howWork-cards-left-card-header__title">Погружаемся в ваши задачи</p>
           </div>
           <p class="section-howWork-cards-left-card__text">
-            Не просто собираем требования,а <span>ананализируем вашу аудиторию и конкурентов</span>,
-            чтобы решение было точно «под вас»
+            Не просто собираем требования,а
+            <span>ананализируем вашу аудиторию и конкурентов</span>, чтобы решение было точно «под
+            вас»
           </p>
         </div>
 
@@ -66,17 +66,43 @@
       >Связаться с нами</AppButon
     >
     <ArrowTwoLine class="section-howWork__arrow" :width="41" :height="41" fill="#797B7D" />
-  </div>
+  </AppSection>
 </template>
 
 <script setup lang="ts">
+import AppSection from './UI/AppSection.vue'
 import CheckIcon from '@/assets/icons/CheckIcon.vue'
 import MonitorIcon from '@/assets/icons/MonitorIcon.vue'
 import PenIcon from '@/assets/icons/PenIcon.vue'
 import SearchIcon from '@/assets/icons/SearchIcon.vue'
 import AppButon from './UI/AppButon.vue'
 import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
-
+const stats = [
+  {
+    icon: SearchIcon,
+    header: '10',
+    span: '+',
+    description: 'лет в IT-разработке',
+  },
+  {
+    icon: PenIcon,
+    header: '50',
+    span: '+',
+    description: 'реализованных проектов',
+  },
+  {
+    icon: MonitorIcon,
+    header: '18',
+    span: '+',
+    description: 'экспертов в штате',
+  },
+  {
+    icon: CheckIcon,
+    header: 'Погружаемся в ваши задачи',
+    span: '+',
+    description: 'госструктур и компаний среди заказчиков',
+  },
+]
 const scrollToSection = (sectionId: string) => {
   const section = document.getElementById(sectionId)
   if (section) {

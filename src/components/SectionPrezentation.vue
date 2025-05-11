@@ -1,8 +1,9 @@
 <template>
   <div class="section-prezentation">
-    <p class="section-title-light">Презентация</p>
+    <AppTitle theme="light">Презентация</AppTitle>
     <div class="presentation-container">
       <div class="presentation-content">
+        <!-- Режим предпросмотра -->
         <div v-if="displayMode === 'preview'" class="presentation-content__preview">
           <div class="presentation-content__preview-img">
             <img :src="previewImageSrc" alt="Превью презентации" />
@@ -28,7 +29,7 @@
                 <strong>Размер:</strong> 2.4 МБ
               </div>
               <div class="presentation-content__preview-description__detali">
-                <strong>Страниц:</strong> 12
+                <strong>Страниц:</strong> {{ pageCount }}
               </div>
               <div class="presentation-content__preview-description__detali">
                 <strong>Обновлено:</strong> 15.04.2025
@@ -37,82 +38,92 @@
           </div>
         </div>
 
-        <div class="presentation-content__header" v-if="displayMode === 'embed'">
-          <p class="presentation-content__header-title">Презентация компании</p>
-          <AppButon @click="downloadPdf" dark
-            ><DownloadIcon :width="18" :height="18" fill="white" /> Скачать PDF</AppButon
-          >
-        </div>
-        <div v-if="displayMode === 'embed'" class="presentation-content__embed">
-          <div ref="pdfContainer" class="presentation-content__embed-container">
-            <div v-if="loading" class="presentation-content__embed-container__loading">
-              Загрузка PDF...
+        <!-- Режим встроенного просмотра -->
+        <template v-if="displayMode === 'embed'">
+          <div class="presentation-content__header">
+            <p class="presentation-content__header-title">Презентация компании</p>
+            <AppButon @click="downloadPdf" dark>
+              <DownloadIcon :width="18" :height="18" fill="white" /> Скачать PDF
+            </AppButon>
+          </div>
+
+          <div class="presentation-content__embed">
+            <div ref="pdfContainer" class="presentation-content__embed-container">
+              <div v-if="loading" class="presentation-content__embed-container__loading">
+                Загрузка PDF...
+              </div>
+              <canvas
+                ref="pdfCanvas"
+                class="presentation-content__embed-container__canvas"
+              ></canvas>
             </div>
-            <canvas ref="pdfCanvas" class="presentation-content__embed-container__canvas"></canvas>
           </div>
-        </div>
-        <div v-if="displayMode === 'embed'" class="presentation-content__controls">
-          <div
-            class="presentation-content__controls-line"
-            :style="{ width: lineWidthPercentage + '%' }"
-          ></div>
-          <div class="presentation-content__controls-btncontainer">
-            <button
-              @click="onePage"
-              :disabled="currentPage <= 1"
-              class="presentation-content__controls-btncontainer__one"
-            >
-              <ArrowTwoLine :width="20" :height="20" fill="white" />
-            </button>
-            <button
-              @click="prevPage"
-              :disabled="currentPage <= 1"
-              class="presentation-content__controls-btncontainer__prev"
-            >
-              <ArrowNext :width="20" :height="20" fill="white" />
-            </button>
-            <button
-              @click="nextPage"
-              :disabled="currentPage >= pageCount"
-              class="presentation-content__controls-btncontainer__next"
-            >
-              <ArrowNext :width="20" :height="20" fill="white" />
-            </button>
-            <button
-              @click="latestPage"
-              :disabled="currentPage >= pageCount"
-              class="presentation-content__controls-btncontainer__latest"
-            >
-              <ArrowTwoLine :width="20" :height="20" fill="white" />
-            </button>
-          </div>
-          <div class="presentation-content__controls-btncontainer">
-            <button
-              @click="zoomOut"
-              class="presentation-content__controls-btncontainer__zoomin control-button"
-            >
-              <ZoomOut :width="20" :height="20" fill="white" />
-            </button>
-            <button
-              @click="zoomIn"
-              class="presentation-content__controls-btncontainer__zoomout control-button"
-            >
-              <ZoomIn :width="20" :height="20" fill="white" />
-            </button>
-            <a :href="pdfSrc" target="_blank">
-              <button class="presentation-content__controls-btncontainer__newpage control-button">
-                <NewPageIcon :width="20" :height="20" fill="white" />
+
+          <div class="presentation-content__controls">
+            <div
+              class="presentation-content__controls-line"
+              :style="{ width: lineWidthPercentage + '%' }"
+            ></div>
+
+            <div class="presentation-content__controls-btncontainer">
+              <button
+                @click="onePage"
+                :disabled="currentPage <= 1"
+                class="presentation-content__controls-btncontainer__one control-button"
+              >
+                <ArrowTwoLine :width="20" :height="20" fill="white" />
               </button>
-            </a>
+              <button
+                @click="prevPage"
+                :disabled="currentPage <= 1"
+                class="presentation-content__controls-btncontainer__prev control-button"
+              >
+                <ArrowNext :width="20" :height="20" fill="white" />
+              </button>
+              <button
+                @click="nextPage"
+                :disabled="currentPage >= pageCount"
+                class="presentation-content__controls-btncontainer__next control-button"
+              >
+                <ArrowNext :width="20" :height="20" fill="white" />
+              </button>
+              <button
+                @click="latestPage"
+                :disabled="currentPage >= pageCount"
+                class="presentation-content__controls-btncontainer__latest control-button"
+              >
+                <ArrowTwoLine :width="20" :height="20" fill="white" />
+              </button>
+            </div>
+
+            <div class="presentation-content__controls-btncontainer">
+              <button
+                @click="zoomOut"
+                class="presentation-content__controls-btncontainer__zoomin control-button"
+              >
+                <ZoomOut :width="20" :height="20" fill="white" />
+              </button>
+              <button
+                @click="zoomIn"
+                class="presentation-content__controls-btncontainer__zoomout control-button"
+              >
+                <ZoomIn :width="20" :height="20" fill="white" />
+              </button>
+              <a :href="pdfSrc" target="_blank">
+                <button class="presentation-content__controls-btncontainer__newpage control-button">
+                  <NewPageIcon :width="20" :height="20" fill="white" />
+                </button>
+              </a>
+            </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, watch, computed } from 'vue'
+import AppTitle from './UI/AppTitle.vue'
 import previewImageSrc from '@/assets/images/presentation-preview.jpg'
 import AppButon from './UI/AppButon.vue'
 import DownloadIcon from '@/assets/icons/DownloadIcon.vue'
@@ -122,216 +133,30 @@ import ArrowNext from '@/assets/icons/ArrowNext.vue'
 import ZoomOut from '@/assets/icons/ZoomOut.vue'
 import ZoomIn from '@/assets/icons/ZoomIn.vue'
 import NewPageIcon from '@/assets/icons/NewPageIcon.vue'
-import type { PDFDocumentProxy } from '@/types/pdf'
+import usePdfViewer from '@/composables/usePdfViewer'
+
 // Путь к PDF-файлу
 const pdfSrc = '/src/assets/pdf/PresONR.pdf'
 const pdfjsWorkerSrc = '/pdfjs/build/pdf.worker.mjs'
 
-// Управление режимом отображения
-const displayMode = ref<'preview' | 'embed'>('preview')
-const pdfContainer = ref<HTMLDivElement | null>(null)
-const pdfCanvas = ref<HTMLCanvasElement | null>(null)
-const loading = ref(true)
-
-// PDF состояние
-let pdfDoc: PDFDocumentProxy | null = null
-const pageCount = ref(0)
-const currentPage = ref(1)
-let currentScale = 1.0
-const lineWidthPercentage = computed(() => {
-  if (pageCount.value <= 1) return 0
-
-  // Вычисляем процент прогресса (0% для первой страницы, 100% для последней)
-  const percentage = ((currentPage.value - 1) / (pageCount.value - 1)) * 100
-
-  // Округляем до целого числа
-  return Math.round(percentage)
-})
-const targetHeight = 470
-
-const renderPage = async (pageNum: number) => {
-  if (!pdfDoc || !pdfCanvas.value || !window.pdfjsLib) return
-
-  const page = await pdfDoc.getPage(pageNum)
-
-  // Получаем viewport с масштабом 1.0 для определения исходных размеров
-  const originalViewport = page.getViewport({ scale: 1.0 })
-
-  // Вычисляем новый масштаб на основе целевой высоты
-  const scaleFactor = targetHeight / originalViewport.height
-
-  // Применяем вычисленный масштаб
-  const viewport = page.getViewport({ scale: scaleFactor * currentScale })
-
-  const canvas = pdfCanvas.value
-  const context = canvas.getContext('2d')
-
-  // Добавляем класс для анимации
-  canvas.classList.add('page-transition')
-
-  // Создаем эффект выхода для текущей страницы
-  canvas.style.opacity = '0'
-  canvas.style.transform = 'scale(0.97)'
-
-  // Короткая пауза для визуализации эффекта выхода
-  await new Promise((resolve) => setTimeout(resolve, 150))
-
-  // Устанавливаем новые размеры
-  canvas.height = viewport.height
-  canvas.width = viewport.width
-
-  const renderContext = {
-    canvasContext: context,
-    viewport: viewport,
-  }
-
-  // Настраиваем анимацию входа для новой страницы
-  canvas.style.transform = 'scale(1.03)'
-
-  await page.render(renderContext).promise
-
-  // Плавно показываем новую страницу с эффектом входа
-  setTimeout(() => {
-    if (canvas) {
-      canvas.style.opacity = '1'
-      canvas.style.transform = 'scale(1)'
-    }
-  }, 50)
-}
-
-// Загрузка PDF документа
-const loadPdf = async () => {
-  try {
-    loading.value = true
-
-    // Проверяем, загружена ли библиотека
-    if (!window.pdfjsLib) {
-      console.error('PDF.js не загружен')
-      loading.value = false
-      return
-    }
-
-    // Настраиваем путь к воркеру
-    window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerSrc
-
-    // Загружаем PDF
-    const loadingTask = window.pdfjsLib.getDocument(pdfSrc)
-    pdfDoc = await loadingTask.promise
-
-    pageCount.value = pdfDoc.numPages
-    currentPage.value = 1
-
-    await renderPage(currentPage.value)
-    loading.value = false
-  } catch (error) {
-    console.error('Ошибка при загрузке PDF:', error)
-    loading.value = false
-  }
-}
-
-const onePage = async () => {
-  if (currentPage.value <= 1) return
-  currentPage.value = 1
-  await renderPage(currentPage.value)
-}
-
-// Функции навигации по страницам
-const prevPage = async () => {
-  if (currentPage.value <= 1) return
-  currentPage.value--
-  await renderPage(currentPage.value)
-}
-
-const nextPage = async () => {
-  if (currentPage.value >= pageCount.value) return
-  currentPage.value++
-  await renderPage(currentPage.value)
-}
-
-const latestPage = async () => {
-  if (currentPage.value >= pageCount.value) return
-  currentPage.value = pageCount.value
-  await renderPage(currentPage.value)
-}
-
-const zoomIn = async () => {
-  // Сохраняем предыдущий масштаб для анимации
-  const prevScale = currentScale
-
-  // Устанавливаем новый масштаб
-  currentScale += 0.25
-
-  // Получаем canvas
-  const canvas = pdfCanvas.value
-  if (canvas) {
-    // Добавляем плавную анимацию масштабирования
-    canvas.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease'
-    canvas.style.opacity = '0.7'
-    canvas.style.transform = `scale(${prevScale / currentScale})`
-
-    // Короткая пауза для визуализации эффекта
-    await new Promise((resolve) => setTimeout(resolve, 100))
-  }
-
-  // Рендерим страницу с новым масштабом
-  await renderPage(currentPage.value)
-}
-
-const zoomOut = async () => {
-  if (currentScale <= 0.5) return
-
-  // Сохраняем предыдущий масштаб для анимации
-  const prevScale = currentScale
-
-  // Устанавливаем новый масштаб
-  currentScale -= 0.25
-
-  // Получаем canvas
-  const canvas = pdfCanvas.value
-  if (canvas) {
-    // Добавляем плавную анимацию масштабирования
-    canvas.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease'
-    canvas.style.opacity = '0.7'
-    canvas.style.transform = `scale(${prevScale / currentScale})`
-
-    // Короткая пауза для визуализации эффекта
-    await new Promise((resolve) => setTimeout(resolve, 100))
-  }
-
-  // Рендерим страницу с новым масштабом
-  await renderPage(currentPage.value)
-}
-
-const switchToEmbed = () => {
-  displayMode.value = 'embed'
-}
-
-// Загрузка PDF при переключении режима
-watch(displayMode, async (newMode) => {
-  if (newMode === 'embed') {
-    // Даем время DOM обновиться перед загрузкой PDF
-    setTimeout(loadPdf, 50)
-  }
-})
-
-// Функция скачивания PDF
-const downloadPdf = () => {
-  const link = document.createElement('a')
-  link.href = pdfSrc
-  link.download = 'Презентация_компании.pdf'
-  link.target = '_blank'
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
-
-// Очистка ресурсов при уничтожении компонента
-onUnmounted(() => {
-  if (pdfDoc) {
-    pdfDoc.destroy()
-    pdfDoc = null
-  }
-})
+// Используем композабл и получаем все возвращаемые значения
+const {
+  displayMode,
+  pdfCanvas,
+  loading,
+  pageCount,
+  currentPage,
+  lineWidthPercentage,
+  pdfContainer,
+  switchToEmbed,
+  goToFirstPage: onePage,
+  goToPrevPage: prevPage,
+  goToNextPage: nextPage,
+  goToLastPage: latestPage,
+  zoomIn,
+  zoomOut,
+  downloadPdf,
+} = usePdfViewer(pdfSrc, pdfjsWorkerSrc)
 </script>
 
 <style lang="scss" scoped>

@@ -1,130 +1,108 @@
 <template>
-  <div class="section-aboutUs">
-    <p class="section-title-light">Почему мы?</p>
-    <p class="section-subtitle">
-      Мы — команда профессионалов с большим опытом научно-исследовательской работы в области
-      создания информационных управляющих и аналитических систем. На протяжении многих лет мы
-      успешно занимаемся программированием веб-приложений, разработкой распределённых
-      информационно-аналитических, мониторинговых и управляющих систем, а также созданием
-      программной и конструкторской документации в рамках НИОКР по ГОСТ.
-    </p>
-    <div class="section-aboutUs-popup">
-      <div class="section-aboutUs-popup-info">
-        <p class="section-aboutUs-popup-info__title">Делаем быстро и качественно</p>
-        <div class="section-aboutUs-popup-info-u">
-          <div class="section-aboutUs-popup-info-u__ul"></div>
-          <p class="section-aboutUs-popup-info-u__text">
-            Предпроектное обследование и определение путей решения проблем заказчиков
-          </p>
-        </div>
-        <div class="section-aboutUs-popup-info-u">
-          <div class="section-aboutUs-popup-info-u__ul"></div>
-          <p class="section-aboutUs-popup-info-u__text">
-            Разработка технических заданий на создание программного обеспечения
-          </p>
-        </div>
-        <div class="section-aboutUs-popup-info-u">
-          <div class="section-aboutUs-popup-info-u__ul"></div>
-          <p class="section-aboutUs-popup-info-u__text">
-            Проведение научных исследований по тематике заказчика
-          </p>
-        </div>
-        <div class="section-aboutUs-popup-info-u">
-          <div class="section-aboutUs-popup-info-u__ul"></div>
-          <p class="section-aboutUs-popup-info-u__text">Разработка программного обеспечения</p>
-        </div>
-        <div class="section-aboutUs-popup-info-u">
-          <div class="section-aboutUs-popup-info-u__ul"></div>
-          <p class="section-aboutUs-popup-info-u__text">Тестирование программного обеспечения</p>
-        </div>
-        <div class="section-aboutUs-popup-info-u">
-          <div class="section-aboutUs-popup-info-u__ul"></div>
-          <p class="section-aboutUs-popup-info-u__text">Разработка программной документации</p>
+  <AppSection
+    id="section-about"
+    title="Почему мы?"
+    subtitle="Мы — команда профессионалов с большим опытом научно-исследовательской работы в области создания информационных управляющих и аналитических систем. На протяжении многих лет мы успешно занимаемся программированием веб-приложений, разработкой распределённых информационно-аналитических, мониторинговых и управляющих систем, а также созданием программной и конструкторской документации в рамках НИОКР по ГОСТ."
+    theme="light"
+  >
+    <div class="about-us-popup">
+      <div class="about-us-popup-info">
+        <h3 class="about-us-popup-info__title">Делаем быстро и качественно</h3>
+
+        <div v-for="(item, index) in servicesList" :key="index" class="about-us-popup-info-item">
+          <div class="about-us-popup-info-item__bullet"></div>
+          <p class="about-us-popup-info-item__text">{{ item }}</p>
         </div>
       </div>
-      <div class="section-aboutUs-popup__img">
-        <img src="../assets/images/SectionAboutUs.png" />
+
+      <div class="about-us-popup__img">
+        <img src="../assets/images/SectionAboutUs.png" alt="О нас" />
       </div>
     </div>
-  </div>
+  </AppSection>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AppSection from '@/components/UI/AppSection.vue'
+
+const servicesList = [
+  'Предпроектное обследование и определение путей решения проблем заказчиков',
+  'Разработка технических заданий на создание программного обеспечения',
+  'Проведение научных исследований по тематике заказчика',
+  'Разработка программного обеспечения',
+  'Тестирование программного обеспечения',
+  'Разработка программной документации',
+]
+</script>
 
 <style lang="scss" scoped>
-@use '@/assets/styles/styles.scss';
-.section {
-  &-aboutUs {
-    @include styles.section-light;
-    height: var(--section-aboutus-height);
+.about-us-popup {
+  padding-left: 59px;
+  gap: 30px;
+  align-items: center;
+  display: flex;
+  border-radius: 13px;
+  width: 100%;
+  height: 526px;
+  box-shadow: var(--card-box-shadow);
+  background: #fff;
+  margin-left: auto;
+  margin-top: 28px;
+  margin-right: auto;
 
-    &-popup {
-      padding-left: 59px;
-      gap: 30px;
-      align-items: center;
+  &-info {
+    flex-shrink: 0;
+    width: 494px;
+    display: flex;
+    flex-direction: column;
+    gap: 33px;
+
+    &__title {
+      font-family: var(--font-family);
+      font-weight: var(--font-weight-medium);
+      font-size: var(--font-size-xl);
+      color: var(--color-text-dark);
+      width: 100%;
+      margin: 0;
+    }
+
+    &-item {
       display: flex;
-      border-radius: 13px;
-      width: var(--section-content-width);
-      height: 526px;
-      box-shadow: var(--card-box-shadow);
-      background: #fff;
-      margin-left: auto;
-      margin-top: 28px;
-      margin-right: auto;
+      width: 100%;
+      gap: 7px;
 
-      &-info {
+      &__bullet {
+        border-radius: 100%;
+        background: var(--color-primary);
+        width: 14px;
         flex-shrink: 0;
-        width: 494px;
-        display: flex;
-        flex-direction: column;
-        gap: 33px;
-
-        &__title {
-          font-family: var(--font-family);
-          font-weight: var(--font-weight-medium);
-          font-size: var(--font-size-xl);
-          color: var(--color-text-dark);
-          width: 100%;
-        }
-
-        &-u {
-          display: flex;
-          width: 100%;
-          gap: 7px;
-
-          &__ul {
-            border-radius: 100%;
-            background: var(--color-primary);
-            width: 14px;
-            flex-shrink: 0;
-            height: 14px;
-          }
-
-          &__text {
-            font-family: var(--font-family);
-            font-weight: var(--font-weight-light);
-            font-size: 20px;
-            line-height: 105%;
-            color: var(--color-text-gray);
-          }
-        }
+        height: 14px;
       }
 
-      &__img {
-        flex-shrink: 0;
-        width: 432px;
-        height: 415px;
-        box-shadow: var(--all-box-shadow);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #fff;
-
-        img {
-          width: 416px;
-          height: 399px;
-        }
+      &__text {
+        font-family: var(--font-family);
+        font-weight: var(--font-weight-light);
+        font-size: 20px;
+        line-height: 105%;
+        color: var(--color-text-gray);
+        margin: 0;
       }
+    }
+  }
+
+  &__img {
+    flex-shrink: 0;
+    width: 432px;
+    height: 415px;
+    box-shadow: var(--all-box-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+
+    img {
+      width: 416px;
+      height: 399px;
     }
   }
 }

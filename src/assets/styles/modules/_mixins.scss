@@ -1,0 +1,79 @@
+// Базовые миксины для секций
+@mixin section-base {
+  width: var(--section-width);
+  position: relative;
+  overflow: hidden;
+}
+
+@mixin section-light {
+  @include section-base;
+  background: var(--bg-light-section);
+}
+
+@mixin section-dark {
+  @include section-base;
+  background: var(--bg-dark-section);
+}
+
+// Миксины для карточек
+@mixin card-base {
+  border-radius: 12px;
+  box-shadow: var(--all-box-shadow);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@mixin card-light {
+  @include card-base;
+  background: #fff;
+}
+
+@mixin card-dark {
+  @include card-base;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border-light);
+}
+
+// Миксины для иконок
+@mixin icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+}
+
+@mixin icon-container-primary {
+  @include icon-container;
+  background: rgba(59, 130, 246, 0.14);
+}
+
+@mixin icon-container-light {
+  @include icon-container;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+// Миксины для кнопок
+@mixin button-base {
+  font-size: var(--font-size-17);
+  padding: var(--btn-padding);
+  border-radius: var(--btn-border-radius);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-400);
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
