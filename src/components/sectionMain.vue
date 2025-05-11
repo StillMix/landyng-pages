@@ -12,8 +12,10 @@
       <p class="section-main__text--title">Мы создаем надежные решения для Вас и Вашей компании</p>
       <p class="section-main__text--subtitle">Мы и есть надежное решение Ваших задач!</p>
       <div class="section-main__text--btn">
-        <AppButton blue>Наши решения <ArrowOneLine /></AppButton>
-        <AppButton white text="Связаться с нами" />
+        <AppButton @click="scrollToSection('section-decisions')" blue
+          >Наши решения <ArrowOneLine
+        /></AppButton>
+        <AppButton white text="Связаться с нами" @click="scrollToSection('section-contact')" />
       </div>
     </div>
   </div>
@@ -34,6 +36,13 @@ let intervalId: number | null = null
 const changeBackground = () => {
   currentIndex = (currentIndex + 1) % backgrounds.length
   currentBackground.value = backgrounds[currentIndex]
+}
+
+const scrollToSection = (sectionId: string) => {
+  const section = document.getElementById(sectionId)
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' })
+  }
 }
 
 onMounted(() => {

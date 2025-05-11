@@ -1,5 +1,5 @@
 <template>
-  <div class="section-contact">
+  <div class="section-contact" id="section-contact">
     <p class="section-title-dark">СВЯЗАТЬСЯ С НАМИ</p>
     <div class="section-contact__popup">
       <div class="section-contact__popup-left">

@@ -1,5 +1,5 @@
 <template>
-  <div class="section-decisions">
+  <div class="section-decisions" id="section-decisions">
     <p class="section-title-dark">НАШИ РЕШЕНИЯ</p>
   </div>
 </template>

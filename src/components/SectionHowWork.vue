@@ -62,7 +62,9 @@
       </div>
     </div>
     <p class="section-howWork__title">Готовы начать сотрудничество?</p>
-    <AppButon blue class="section-howWork__btn">Связаться с нами</AppButon>
+    <AppButon @click="scrollToSection('section-contact')" blue class="section-howWork__btn"
+      >Связаться с нами</AppButon
+    >
     <ArrowTwoLine class="section-howWork__arrow" :width="41" :height="41" fill="#797B7D" />
   </div>
 </template>
@@ -74,6 +76,13 @@ import PenIcon from '@/assets/icons/PenIcon.vue'
 import SearchIcon from '@/assets/icons/SearchIcon.vue'
 import AppButon from './UI/AppButon.vue'
 import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
+
+const scrollToSection = (sectionId: string) => {
+  const section = document.getElementById(sectionId)
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' })
+  }
+}
 </script>
 
 <style lang="scss" scoped>
