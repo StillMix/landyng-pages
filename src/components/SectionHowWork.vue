@@ -79,11 +79,9 @@ import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
 <style lang="scss" scoped>
 .section {
   &-howWork {
-    overflow: hidden;
-    width: 100vw;
-    height: 1081px;
-    background: var(--bg-light-section);
-    position: relative;
+    @extend .section-light;
+    height: var(--section-howwork-height);
+
     &-cards {
       display: flex;
       align-items: center;
@@ -92,54 +90,56 @@ import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
       margin-right: auto;
       margin-top: 7px;
       justify-content: space-between;
+
       &-left {
         justify-content: center;
         gap: 22px;
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
+
         &-card {
+          @extend .card-light;
           width: 394px;
           height: 143px;
-          border-radius: 12px;
-          box-shadow: var(--all-box-shadow);
-          background: #fff;
-          overflow: hidden;
           padding: 5px 28px 23px 16px;
+
           &-header {
             display: flex;
             align-items: center;
             gap: 10px;
             padding-bottom: 5px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
             &__img {
-              border-radius: 6px;
+              @extend .icon-container-primary;
               width: 40px;
               height: 40px;
-              background: rgba(59, 130, 246, 0.14);
-              display: flex;
-              align-items: center;
-              justify-content: center;
+              border-radius: 6px;
             }
+
             &__title {
               font-family: var(--font-family);
-              font-weight: 600;
-              font-size: 18px;
-              color: #000;
+              font-weight: var(--font-weight-semibold);
+              font-size: var(--font-size-regular);
+              color: var(--color-text-dark);
             }
           }
+
           &__text {
             font-family: var(--font-family);
-            font-weight: 300;
+            font-weight: var(--font-weight-light);
             font-size: 15px;
-            color: #000;
+            color: var(--color-text-dark);
             margin-top: 8px;
+
             span {
-              font-weight: 600;
+              font-weight: var(--font-weight-semibold);
             }
           }
         }
       }
+
       &-right {
         flex-shrink: 0;
         width: 690px;
@@ -150,26 +150,30 @@ import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
         display: flex;
         align-items: center;
         justify-content: center;
+
         img {
           width: 690px;
           height: 632px;
         }
       }
     }
+
     &__title {
       font-family: var(--font-family);
-      font-weight: 600;
+      font-weight: var(--font-weight-semibold);
       font-size: 36px;
-      color: #000;
+      color: var(--color-text-dark);
       text-align: center;
       margin-top: 35px;
     }
+
     &__btn {
       display: block;
       margin-top: 51px;
       margin-left: auto;
       margin-right: auto;
     }
+
     &__arrow {
       margin-top: 24px;
       display: block;

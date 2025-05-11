@@ -1,4 +1,53 @@
 :root {
+  /* Section dimensions */
+  --section-width: 100vw;
+  --section-content-width: 1032px;
+
+  /* Section heights */
+  --section-main-height: 100vh;
+  --section-aboutus-height: 964px;
+  --section-number-height: 735px;
+  --section-howwork-height: 1081px;
+  --section-contact-height: 942px;
+  --section-companes-height: 499px;
+  --section-decisions-height: 942px;
+  --section-prezentation-height: 942px;
+
+  /* Typography */
+  --font-family: 'Helvetica Neue', sans-serif;
+  --font-size-small: 13px;
+  --font-size-medium: 16px;
+  --font-size-regular: 18px;
+  --font-size-large: 22px;
+  --font-size-xl: 29px;
+  --font-size-xxl: 40px;
+
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Section titles */
+  --section-title-size: 29px;
+  --section-title-weight: 700;
+  --section-title-top: 98px;
+  --section-subtitle-top: 24px;
+
+  /* Colors */
+  --color-primary: #3b82f6;
+  --color-primary-light: rgba(59, 130, 246, 0.14);
+  --color-text-dark: #000;
+  --color-text-gray: #666;
+  --color-text-light-gray: #818181;
+  --color-text-white: #fff;
+  --color-border-light: rgba(255, 255, 255, 0.1);
+
+  /* Backgrounds */
+  --bg-light-section: linear-gradient(135deg, #f5f7fa 0%, #e8ecf2 100%);
+  --bg-dark-section: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
+
+  /* Main section specific */
   --section-main-text-left: 137px;
   --section-main-btn-top: 25px;
   --section-main-gap: 15px;
@@ -8,42 +57,36 @@
   --section-main-overlay: linear-gradient(270deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 100%);
   --width-text-main: 686px;
 
+  /* Number section specific */
   --section-number-card-height: 309px;
   --section-number-card-width: 222px;
   --section-number-top-card: 91px;
   --section-number-gap-card: 48px;
   --section-number-icon-size: 31px;
-  --section-number-height: 735px;
   --font-size-number-subtitle: 40px;
   --width-number-subtitle: 672px;
 
-  --section-prezentation-height: 942px;
+  /* Buttons */
+  --btn-padding: 14px 20px;
+  --btn-border-radius: 4px;
+  --btn-image-color: #3b82f6;
 
-  --section-width-blocks: 1032px;
-  --section-subtitle-top: 24px;
-  --section-title-top: 98px;
-  --section-title-weight: 700;
-  --section-title-size: 29px;
+  /* Shadows */
+  --all-box-shadow: 0 4px 18px 2px rgba(0, 0, 0, 0.1);
+  --card-box-shadow: 0 25px 39px 12px rgba(0, 0, 0, 0.1);
+
+  /* Other */
   --section-gray-color: #94a3b8;
   --section-white-color: #fff;
   --section-black-color: #000;
-
-  --btn-image-color: #3b82f6;
-  --btn-border-radius: 4px;
-  --btn-padding: 14px 20px;
-
-  --font-family: 'Helvetica Neue', sans-serif;
   --font-size-17: 17px;
   --font-weight-400: 400;
   --font-weight-500: 500;
 
-  --bg-light-section: linear-gradient(135deg, #f5f7fa 0%, #e8ecf2 100%);
-  --bg-dark-section: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
-  --all-box-shadow: 0 4px 18px 2px rgba(0, 0, 0, 0.1);
-
+  /* Scrollbar styles */
   --scrollbar-width: 8px;
   --scrollbar-track-color: linear-gradient(135deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
-  --scrollbar-thumb-color: rgba(59, 130, 246, 0.5); /* Используем цвет кнопок */
+  --scrollbar-thumb-color: rgba(59, 130, 246, 0.5);
   --scrollbar-thumb-hover-color: rgba(59, 130, 246, 0.8);
 }
 
@@ -71,13 +114,12 @@ textarea,
   -ms-user-select: text !important;
 }
 
-/* Стилизация для Firefox */
+/* Scrollbar styles */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
 }
 
-/* Стилизация для WebKit/Blink (Chrome, Safari, новые версии Edge) */
 ::-webkit-scrollbar {
   width: var(--scrollbar-width);
   height: var(--scrollbar-width);
@@ -97,58 +139,199 @@ textarea,
   background: var(--scrollbar-thumb-hover-color);
 }
 
-/* Скрываем полосу прокрутки в IE, Edge и Firefox при сохранении функциональности */
 .hide-scrollbar {
-  -ms-overflow-style: none; /* для IE и Edge */
-  scrollbar-width: none; /* для Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none; /* для Chrome, Safari и Opera */
+  display: none;
+}
+
+/* Common section styles */
+.section-base {
+  width: var(--section-width);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-light {
+  @extend .section-base;
+  background: var(--bg-light-section);
+}
+
+.section-dark {
+  @extend .section-base;
+  background: var(--bg-dark-section);
+}
+
+/* Section title styles */
+.section-title-base {
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  margin-top: var(--section-title-top);
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 4px;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 86px;
+    height: 2px;
+    background-color: var(--color-primary);
+  }
 }
 
 .section-title-dark {
+  @extend .section-title-base;
   color: var(--section-white-color);
-  font-size: var(--section-title-size);
-  font-weight: var(--section-title-weight);
-  margin-top: var(--section-title-top);
-  text-align: center;
-  position: relative;
-  display: inline-block;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  padding-bottom: 4px;
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 86px;
-    height: 2px;
-    background-color: #3b82f6;
-  }
 }
 
 .section-title-light {
+  @extend .section-title-base;
   color: var(--section-black-color);
-  font-size: var(--section-title-size);
-  font-weight: var(--section-title-weight);
-  margin-top: var(--section-title-top);
+}
+
+/* Common subtitle style */
+.section-subtitle {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-large);
+  line-height: 141%;
   text-align: center;
-  position: relative;
-  display: inline-block;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  padding-bottom: 4px;
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 86px;
-    height: 2px;
-    background-color: #3b82f6;
+  margin: 24px auto 0;
+  color: #3b3b3b;
+  width: var(--section-content-width);
+}
+
+/* Common card styles */
+.card-base {
+  border-radius: 12px;
+  box-shadow: var(--all-box-shadow);
+}
+
+.card-light {
+  @extend .card-base;
+  background: #fff;
+}
+
+.card-dark {
+  @extend .card-base;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border-light);
+}
+
+/* Common icon container */
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+}
+
+.icon-container-primary {
+  @extend .icon-container;
+  background: rgba(59, 130, 246, 0.14);
+}
+
+.icon-container-light {
+  @extend .icon-container;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Common content container */
+.content-container {
+  width: var(--section-content-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Button styles */
+.button-base {
+  font-size: var(--font-size-17);
+  padding: var(--btn-padding);
+  border-radius: var(--btn-border-radius);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-400);
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 }
+
+.button-blue {
+  @extend .button-base;
+  background-color: var(--btn-image-color);
+  color: var(--section-white-color);
+}
+
+.button-white {
+  @extend .button-base;
+  background-color: transparent;
+  color: var(--section-white-color);
+  border: 1px solid var(--section-white-color);
+}
+
+.button-dark {
+  @extend .button-base;
+  background: linear-gradient(133deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
+  color: var(--section-white-color);
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromRight {
+  from {
+    transform: translateX(30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromLeft {
+  from {
+    transform: translateX(-30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scroll-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive breakpoints can be added here as needed */

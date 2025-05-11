@@ -94,67 +94,69 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
 <style lang="scss" scoped>
 .section {
   &-contact {
-    overflow: hidden;
-    width: 100vw;
-    height: 942px;
-    background: var(--bg-dark-section);
-    position: relative;
+    @extend .section-dark;
+    height: var(--section-contact-height);
     flex-direction: column;
+
     &__popup {
       margin-top: 59px;
       margin-left: auto;
       margin-right: auto;
       border-radius: 17px;
-      width: 1032px;
+      width: var(--section-content-width);
       height: 652px;
       box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.1);
       display: flex;
       overflow: hidden;
+
       &-left {
         flex-shrink: 0;
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         height: 100%;
         width: 426px;
         padding-left: 36px;
+
         &__logo {
           margin-top: 51px;
         }
+
         &__title {
           margin-top: 85px;
           font-family: var(--font-family);
-          font-weight: 400;
+          font-weight: var(--font-weight-regular);
           font-size: 28px;
           color: #fff;
         }
+
         &__subtitle {
           margin-top: 53px;
           font-family: var(--font-family);
-          font-weight: 400;
+          font-weight: var(--font-weight-regular);
           font-size: 13px;
-          color: #818181;
+          color: var(--color-text-light-gray);
           line-height: 185%;
           width: 363px;
         }
+
         &-cards {
           display: flex;
           flex-direction: column;
           margin-top: 50px;
           gap: 42px;
+
           &__card {
             display: flex;
             width: 363px;
             align-items: center;
             gap: 13px;
+
             &__img {
+              @extend .icon-container-light;
               flex-shrink: 0;
               width: 40px;
               height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              border-radius: 100px;
-              background: rgba(255, 255, 255, 0.1);
             }
+
             &-con {
               flex-shrink: 0;
               display: flex;
@@ -162,17 +164,19 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               width: 100%;
               height: 100%;
               justify-content: space-between;
+
               &__title {
                 font-family: var(--font-family);
-                font-weight: 400;
-                font-size: 18px;
+                font-weight: var(--font-weight-regular);
+                font-size: var(--font-size-regular);
                 line-height: 100%;
                 color: #fff;
               }
+
               &__subtitle {
                 font-family: var(--font-family);
-                font-weight: 400;
-                font-size: 16px;
+                font-weight: var(--font-weight-regular);
+                font-size: var(--font-size-medium);
                 line-height: 100%;
                 color: #6b7280;
               }
@@ -180,18 +184,21 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
           }
         }
       }
+
       &-right {
         width: 100%;
         background: #fff;
+
         &__title {
           text-align: center;
           margin-top: 82px;
           font-family: var(--font-family);
-          font-weight: 700;
+          font-weight: var(--font-weight-bold);
           font-size: 22px;
           line-height: 100%;
           color: #000;
         }
+
         &-inputs {
           padding-left: 35px;
           margin-top: 34px;
@@ -199,17 +206,20 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
           flex-wrap: wrap;
           width: 100%;
           gap: 23px 14px;
+
           &-label {
             display: flex;
             flex-direction: column;
             gap: 13px;
+
             &__title {
               font-family: var(--font-family);
-              font-weight: 300;
-              font-size: 13px;
+              font-weight: var(--font-weight-light);
+              font-size: var(--font-size-small);
               line-height: 100%;
               color: #000;
             }
+
             &__input {
               padding-left: 10px;
               border: 1px solid #e2e8f0;
@@ -217,6 +227,7 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               width: 260px;
               height: 44px;
             }
+
             &__inputtext {
               padding: 10px;
               border: 1px solid #e2e8f0;
@@ -227,6 +238,7 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
             }
           }
         }
+
         &-check {
           display: flex;
           align-items: center;
@@ -235,11 +247,13 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
           width: 533px;
           gap: 15px;
           margin-top: 35px;
+
           &-label {
             width: 17px;
             height: 17px;
             overflow: hidden;
             position: relative;
+
             input[type='checkbox'] {
               position: absolute;
               width: 100%;
@@ -248,6 +262,7 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               cursor: pointer;
               z-index: 2;
             }
+
             &__checkbox {
               width: 17px;
               height: 17px;
@@ -257,6 +272,7 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               transition: background 0.3s ease;
               position: relative;
               overflow: hidden;
+
               &::before {
                 content: '';
                 position: absolute;
@@ -270,6 +286,7 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
                 z-index: 0;
               }
             }
+
             input[type='checkbox']:checked
               + .section-contact__popup-right-check-label__checkbox::before {
               transform: scale(1);
@@ -282,13 +299,15 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               opacity: 0;
             }
           }
+
           &__text {
             font-family: var(--font-family);
-            font-weight: 300;
+            font-weight: var(--font-weight-light);
             font-size: 11px;
             line-height: 118%;
             color: #000;
           }
+
           &__btn {
             display: block;
             margin-top: 38px;

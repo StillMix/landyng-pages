@@ -50,13 +50,12 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .section {
   &-main {
-    overflow: hidden;
-    width: 100%;
-    height: 100vh;
-    position: relative;
+    @extend .section-base;
+    height: var(--section-main-height);
     display: flex;
     align-items: center;
     transition: background-image 1.5s ease-in-out;
+
     &__overlay {
       z-index: 0;
       position: absolute;
@@ -66,22 +65,26 @@ onBeforeUnmount(() => {
       left: 0;
       background: var(--section-main-overlay);
     }
+
     &__text {
       width: var(--width-text-main);
       z-index: 1;
       margin-left: var(--section-main-text-left);
+
       &--title {
-        font-weight: var(--font-weight-400);
+        font-weight: var(--font-weight-regular);
         font-size: var(--font-size-main-title);
         font-family: var(--font-family);
         color: var(--section-white-color);
       }
+
       &--subtitle {
-        font-weight: var(--font-weight-400);
+        font-weight: var(--font-weight-regular);
         font-size: var(--font-size-main-subtitle);
         font-family: var(--font-family);
         color: var(--font-color-main-subtitle);
       }
+
       &--btn {
         margin-top: var(--section-main-btn-top);
         display: flex;

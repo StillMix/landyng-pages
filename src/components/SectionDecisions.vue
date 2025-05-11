@@ -9,12 +9,8 @@
 <style lang="scss" scoped>
 .section {
   &-decisions {
-    overflow: hidden;
-    width: 100vw;
-    height: 942px;
-    background: var(--bg-dark-section);
-    position: relative;
-    overflow: hidden;
+    @extend .section-dark;
+    height: var(--section-decisions-height);
   }
 }
 </style>

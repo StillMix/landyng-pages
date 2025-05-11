@@ -47,39 +47,38 @@ import RealeseProjectIcon from '@/assets/icons/RealeseProjectIcon.vue'
 <style lang="scss" scoped>
 .section {
   &-number {
-    overflow: hidden;
-    width: 100vw;
+    @extend .section-dark;
     height: var(--section-number-height);
-    background: var(--bg-dark-section);
-    position: relative;
+
     &__subtitle {
       font-size: var(--font-size-number-subtitle);
       color: var(--section-white-color);
-      font-weight: var(--font-weight-500);
+      font-weight: var(--font-weight-medium);
       margin-top: var(--section-subtitle-top);
       width: var(--width-number-subtitle);
       text-align: center;
       margin-left: auto;
       margin-right: auto;
     }
+
     &__cards {
-      width: var(--section-width-blocks);
+      width: var(--section-content-width);
       margin-left: auto;
       margin-right: auto;
       display: flex;
       justify-content: center;
       gap: var(--section-number-gap-card);
       margin-top: var(--section-number-top-card);
+
       &-card {
+        @extend .card-dark;
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
         width: var(--section-number-card-width);
         height: var(--section-number-card-height);
-        background: rgba(255, 255, 255, 0.05);
+
         &__icon {
           margin-bottom: 15px;
           width: 60px;
@@ -92,25 +91,28 @@ import RealeseProjectIcon from '@/assets/icons/RealeseProjectIcon.vue'
           box-shadow: 0 0 30px 0 rgba(59, 130, 246, 0.2);
           margin-top: 7px;
         }
+
         &__number {
           font-family: var(--font-family);
-          font-weight: 700;
+          font-weight: var(--font-weight-bold);
           font-size: 42px;
           color: #fff;
           margin-top: 46px;
+
           span {
             font-family: var(--font-family);
-            font-weight: 700;
+            font-weight: var(--font-weight-bold);
             font-size: 31px;
             text-align: center;
-            color: #3b82f6;
+            color: var(--color-primary);
           }
         }
+
         &__description {
           text-align: center;
           margin-top: 10px;
           font-family: var(--font-family);
-          font-weight: 700;
+          font-weight: var(--font-weight-bold);
           font-size: 19px;
           color: #f8fafc;
         }

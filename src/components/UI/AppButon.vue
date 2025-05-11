@@ -47,22 +47,16 @@ const handleClick = (event: MouseEvent) => {
 
 <style scoped lang="scss">
 button {
-  font-size: var(--font-size-17);
-  padding: var(--btn-padding);
-  border-radius: var(--btn-border-radius);
-  cursor: pointer;
-  font-family: var(--font-family);
-  font-weight: var(--font-weight-400);
-  border: none;
-  outline: none;
-  transition: all 0.3s ease;
-
-  &:hover {
-    opacity: 0.9;
+  &.blue {
+    @extend .button-blue;
   }
 
-  &:active {
-    transform: translateY(1px);
+  &.white {
+    @extend .button-white;
+  }
+
+  &.dark {
+    @extend .button-dark;
   }
 }
 
@@ -74,20 +68,5 @@ button {
 
 .fullwidth {
   width: 100%;
-}
-
-.blue {
-  background-color: var(--btn-image-color);
-  color: var(--section-white-color, #fff);
-}
-
-.white {
-  background-color: transparent;
-  color: var(--section-white-color, #fff);
-  border: 1px solid var(--section-white-color, #fff);
-}
-.dark {
-  background: linear-gradient(133deg, #0f172a 0%, rgba(30, 41, 59, 0.9) 100%);
-  color: var(--section-white-color);
 }
 </style>

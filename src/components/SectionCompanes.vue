@@ -1,7 +1,7 @@
 <template>
   <div class="section-companes">
     <p class="section-title-light">Нам доверяют</p>
-    <p class="section-companes__subtitle">
+    <p class="section-subtitle">
       На протяжении 10+ лет мы создаем высокотехнологичные решения для организаций, где требования к
       надежности, безопасности и инновациям особенно высоки. Нашими клиентами становятся те, кто не
       может позволить себе компромиссов.
@@ -48,21 +48,8 @@
 
 <style lang="scss" scoped>
 .section-companes {
-  width: 100vw;
-  height: 499px;
-  background: var(--bg-light-section);
-  position: relative;
-
-  &__subtitle {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 141%;
-    text-align: center;
-    margin: 24px auto 0;
-    color: #3b3b3b;
-    width: 1032px;
-  }
+  @extend .section-light;
+  height: var(--section-companes-height);
 
   &__marquee {
     margin-top: 51px;
@@ -89,15 +76,6 @@
       flex-shrink: 0;
       height: 53px;
     }
-  }
-}
-
-@keyframes scroll-marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
   }
 }
 </style>
