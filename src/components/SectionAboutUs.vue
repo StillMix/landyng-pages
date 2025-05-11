@@ -52,10 +52,10 @@
 <script setup lang="ts"></script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/styles.scss';
+@use '@/assets/styles/styles.scss';
 .section {
   &-aboutUs {
-    @include section-light;
+    @include styles.section-light;
     height: var(--section-aboutus-height);
 
     &-popup {

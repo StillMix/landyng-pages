@@ -7,8 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
-
 defineProps({
   blue: {
     type: Boolean,
@@ -46,18 +44,18 @@ const handleClick = (event: MouseEvent) => {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/styles/styles.css';
+@use '@/assets/styles/styles.scss';
 button {
   &.blue {
-    @include button-blue;
+    @include styles.button-blue;
   }
 
   &.white {
-    @include button-white;
+    @include styles.button-white;
   }
 
   &.dark {
-    @include button-dark;
+    @include styles.button-dark;
   }
 }
 

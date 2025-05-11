@@ -48,10 +48,10 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/styles.scss';
+@use '@/assets/styles/styles.scss';
 .section {
   &-main {
-    @include section-base;
+    @include styles.section-base;
     height: var(--section-main-height);
     display: flex;
     align-items: center;

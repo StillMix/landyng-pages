@@ -77,10 +77,10 @@ import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/styles.scss';
+@use '@/assets/styles/styles.scss';
 .section {
   &-howWork {
-    @include section-light;
+    @include styles.section-light;
     height: var(--section-howwork-height);
 
     &-cards {
@@ -100,7 +100,7 @@ import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
         flex-direction: column;
 
         &-card {
-          @include card-light;
+          @include styles.card-light;
           width: 394px;
           height: 143px;
           padding: 5px 28px 23px 16px;
@@ -113,7 +113,7 @@ import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 
             &__img {
-              @include icon-container-primary;
+              @include styles.icon-container-primary;
               width: 40px;
               height: 40px;
               border-radius: 6px;
