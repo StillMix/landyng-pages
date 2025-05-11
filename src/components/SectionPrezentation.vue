@@ -1,6 +1,6 @@
 <template>
   <div class="section-prezentation">
-    <p class="section-title-light">ПРЕЗЕНТАЦИЯ</p>
+    <p class="section-title-light">Презентация</p>
     <div class="presentation-container">
       <div class="presentation-content">
         <div v-if="displayMode === 'preview'" class="presentation-content__preview">

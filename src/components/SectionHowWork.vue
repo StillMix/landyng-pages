@@ -1,0 +1,182 @@
+<template>
+  <div class="section-howWork">
+    <p class="section-title-light">Как мы работаем</p>
+    <div class="section-howWork-cards">
+      <div class="section-howWork-cards-left">
+        <div class="section-howWork-cards-left-card">
+          <div class="section-howWork-cards-left-card-header">
+            <div class="section-howWork-cards-left-card-header__img">
+              <SearchIcon :width="29" :height="29" fill="#3B82F6" />
+            </div>
+            <p class="section-howWork-cards-left-card-header__title">Погружаемся в ваши задачи</p>
+          </div>
+          <p class="section-howWork-cards-left-card__text">
+            Не просто собираем требования,а <span>ананализируем вашу аудиторию и конкурентов</span>,
+            чтобы решение было точно «под вас»
+          </p>
+        </div>
+
+        <div class="section-howWork-cards-left-card">
+          <div class="section-howWork-cards-left-card-header">
+            <div class="section-howWork-cards-left-card-header__img">
+              <PenIcon :width="29" :height="29" fill="#3B82F6" />
+            </div>
+            <p class="section-howWork-cards-left-card-header__title">Создаём понятный прототип</p>
+          </div>
+          <p class="section-howWork-cards-left-card__text">
+            Вы <span>видите структуру будущего продукта</span>до начала разработки — можно внести
+            правки без лишних затрат.
+          </p>
+        </div>
+
+        <div class="section-howWork-cards-left-card">
+          <div class="section-howWork-cards-left-card-header">
+            <div class="section-howWork-cards-left-card-header__img">
+              <MonitorIcon :width="29" :height="29" fill="#3B82F6" />
+            </div>
+            <p class="section-howWork-cards-left-card-header__title">
+              Разрабатываем с прозрачностью
+            </p>
+          </div>
+          <p class="section-howWork-cards-left-card__text">
+            Вы получаете <span>регулярные отчеты и тестируете промежуточные версии</span> — всё под
+            контролем.
+          </p>
+        </div>
+
+        <div class="section-howWork-cards-left-card">
+          <div class="section-howWork-cards-left-card-header">
+            <div class="section-howWork-cards-left-card-header__img">
+              <CheckIcon :width="29" :height="29" fill="#3B82F6" />
+            </div>
+            <p class="section-howWork-cards-left-card-header__title">Запускаем и поддерживаем</p>
+          </div>
+          <p class="section-howWork-cards-left-card__text">
+            Мы не просто сдаём проект, а <span>гарантируем стабильную работу</span> и помогаем с
+            обновлениями.
+          </p>
+        </div>
+      </div>
+      <div class="section-howWork-cards-right">
+        <img src="../assets/images/SectionHowWorkImg.png" />
+      </div>
+    </div>
+    <p class="section-howWork__title">Готовы начать сотрудничество?</p>
+    <AppButon blue class="section-howWork__btn">Связаться с нами</AppButon>
+    <ArrowTwoLine class="section-howWork__arrow" :width="41" :height="41" fill="#797B7D" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import CheckIcon from '@/assets/icons/CheckIcon.vue'
+import MonitorIcon from '@/assets/icons/MonitorIcon.vue'
+import PenIcon from '@/assets/icons/PenIcon.vue'
+import SearchIcon from '@/assets/icons/SearchIcon.vue'
+import AppButon from './UI/AppButon.vue'
+import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
+</script>
+
+<style lang="scss" scoped>
+.section {
+  &-howWork {
+    overflow: hidden;
+    width: 100vw;
+    height: 1081px;
+    background: var(--bg-light-section);
+    position: relative;
+    &-cards {
+      display: flex;
+      align-items: center;
+      width: 1195px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 7px;
+      justify-content: space-between;
+      &-left {
+        justify-content: center;
+        gap: 22px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        &-card {
+          width: 394px;
+          height: 143px;
+          border-radius: 12px;
+          box-shadow: var(--all-box-shadow);
+          background: #fff;
+          overflow: hidden;
+          padding: 5px 28px 23px 16px;
+          &-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            &__img {
+              border-radius: 6px;
+              width: 40px;
+              height: 40px;
+              background: rgba(59, 130, 246, 0.14);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            &__title {
+              font-family: var(--font-family);
+              font-weight: 600;
+              font-size: 18px;
+              color: #000;
+            }
+          }
+          &__text {
+            font-family: var(--font-family);
+            font-weight: 300;
+            font-size: 15px;
+            color: #000;
+            margin-top: 8px;
+            span {
+              font-weight: 600;
+            }
+          }
+        }
+      }
+      &-right {
+        flex-shrink: 0;
+        width: 690px;
+        height: 690px;
+        border-radius: 100%;
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: var(--all-box-shadow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: 690px;
+          height: 632px;
+        }
+      }
+    }
+    &__title {
+      font-family: var(--font-family);
+      font-weight: 600;
+      font-size: 36px;
+      color: #000;
+      text-align: center;
+      margin-top: 35px;
+    }
+    &__btn {
+      display: block;
+      margin-top: 51px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    &__arrow {
+      margin-top: 24px;
+      display: block;
+      transform: rotate(-90deg);
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+</style>
