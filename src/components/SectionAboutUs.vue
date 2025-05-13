@@ -68,6 +68,7 @@ const servicesList = [
 
     &-item {
       display: flex;
+      align-items: center;
       width: 100%;
       gap: 7px;
 

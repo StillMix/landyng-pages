@@ -267,7 +267,7 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
             &__checkbox {
               width: 17px;
               height: 17px;
-              border: 1px solid #e2e8f0;
+              border: 1px solid #a5bad5;
               border-radius: 2px;
               z-index: 1;
               transition: background 0.3s ease;

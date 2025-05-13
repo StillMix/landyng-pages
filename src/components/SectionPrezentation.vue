@@ -98,6 +98,12 @@
 
             <div class="presentation-content__controls-btncontainer">
               <button
+                @click="switchToEmbed"
+                class="presentation-content__controls-btncontainer__zoomout control-button"
+              >
+                <BackPreaentation :width="20" :height="20" fill="white" />
+              </button>
+              <button
                 @click="zoomOut"
                 class="presentation-content__controls-btncontainer__zoomin control-button"
               >
@@ -134,6 +140,7 @@ import ZoomOut from '@/assets/icons/ZoomOut.vue'
 import ZoomIn from '@/assets/icons/ZoomIn.vue'
 import NewPageIcon from '@/assets/icons/NewPageIcon.vue'
 import usePdfViewer from '@/composables/usePdfViewer'
+import BackPreaentation from '@/assets/icons/BackPreaentation.vue'
 
 // Путь к PDF-файлу
 const pdfSrc = '/src/assets/pdf/PresONR.pdf'

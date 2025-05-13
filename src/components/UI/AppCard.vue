@@ -5,7 +5,10 @@
       { 'app-card--dark': theme === 'dark', 'app-card--light': theme === 'light' },
     ]"
   >
-    <div v-if="$slots.header || title || icon" class="app-card__header">
+    <div
+      v-if="$slots.header || title || icon"
+      :class="['app-card__header', { 'app-card__header--light': theme === 'light' }]"
+    >
       <div
         v-if="icon"
         class="app-card__icon"
@@ -16,6 +19,7 @@
       >
         <component :is="icon" :width="iconSize" :height="iconSize" :fill="iconFill" />
       </div>
+      <p v-if="headerTitle">{{ headerTitle }}</p>
     </div>
     <div class="app-card__content" :class="{ 'app-card__content--centered': contentCentered }">
       <slot></slot>
@@ -35,6 +39,10 @@ defineProps({
     type: String,
     default: 'light',
     validator: (value: string) => ['light', 'dark'].includes(value),
+  },
+  headerTitle: {
+    type: String,
+    default: null,
   },
   icon: {
     type: Object as PropType<IconComponent>,
@@ -108,6 +116,12 @@ defineProps({
     display: flex;
     align-items: center;
     justify-content: center;
+    &--light {
+      border-radius: 6px;
+      width: 40px;
+      height: 40px;
+      background: rgba(59, 130, 246, 0.14);
+    }
     &--dark {
       width: 60px;
       margin-top: 7px;
@@ -115,6 +129,21 @@ defineProps({
       border-radius: 100%;
       background: rgba(59, 130, 246, 0.15);
       box-shadow: 0 0 30px 0 rgba(59, 130, 246, 0.2);
+    }
+  }
+  &__header {
+    &--light {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      p {
+        font-family: var(--font-family);
+        font-weight: 600;
+        font-size: 18px;
+        color: #000;
+      }
     }
   }
 }

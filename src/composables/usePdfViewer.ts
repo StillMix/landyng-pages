@@ -180,7 +180,7 @@ export default function usePdfViewer(pdfSrc: string, pdfjsWorkerSrc: string) {
   }
 
   const switchToEmbed = () => {
-    displayMode.value = 'embed'
+    displayMode.value = displayMode.value === 'embed' ? 'preview' : 'embed'
   }
 
   // Загрузка PDF при переключении режима
