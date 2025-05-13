@@ -190,7 +190,7 @@
             blue
             data-animation="fade-in-up"
             style="animation-delay: 2s"
-            :disabled="isSubmitting"
+            :disabled="isSubmitting || !isFormValid"
           >
             <span v-if="isSubmitting">Отправка...</span>
             <span v-else>Отправить <ArrowOneLine /></span>
@@ -202,7 +202,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import EmailIcon from '@/assets/icons/EmailIcon.vue'
 import GPSIcon from '@/assets/icons/GPSIcon.vue'
 import LogoIcon from '@/assets/icons/LogoIcon.vue'
@@ -210,6 +210,7 @@ import PhoneIcon from '@/assets/icons/PhoneIcon.vue'
 import AppButon from './UI/AppButon.vue'
 import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
 import AnimatedView from '@/components/AnimatedView.vue'
+import CheckIcon from '@/assets/icons/CheckIcon.vue'
 
 // Состояние формы
 const formState = reactive({
@@ -234,6 +235,16 @@ const errors = reactive({
 const isSubmitting = ref(false)
 const submitSuccess = ref(false)
 const submitError = ref(false)
+
+// Проверка валидности формы
+const isFormValid = computed(() => {
+  return (
+    formState.name.trim() !== '' &&
+    formState.phone.trim() !== '' &&
+    formState.email.trim() !== '' &&
+    formState.agreement
+  )
+})
 
 // Валидация полей
 const validateName = () => {
@@ -762,6 +773,7 @@ const handleSubmit = async (e: Event) => {
               gap: 5px;
             }
             &:disabled {
+              background: #c3c3c3;
               opacity: 0.7;
               cursor: not-allowed;
             }
