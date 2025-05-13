@@ -68,6 +68,9 @@ const stats = [
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards 0.2s;
   }
 
   &__cards {
@@ -75,6 +78,37 @@ const stats = [
     justify-content: center;
     gap: var(--section-number-gap-card);
     margin-top: var(--section-number-top-card);
+    perspective: 1000px;
+
+    .app-card {
+      box-shadow: 0 15px 35px rgba(59, 130, 246, 0);
+      opacity: 0;
+      transform: translateY(30px) rotateY(15deg) scale(0.9);
+      animation: cardAppear 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      &:nth-child(1) {
+        animation-delay: 0.3s;
+      }
+      &:nth-child(2) {
+        animation-delay: 0.5s;
+      }
+      &:nth-child(3) {
+        animation-delay: 0.7s;
+      }
+      &:nth-child(4) {
+        animation-delay: 0.9s;
+      }
+      &:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2);
+        transition:
+          transform 0.4s ease,
+          box-shadow 0.4s ease;
+      }
+
+      transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+    }
   }
 }
 
@@ -85,6 +119,8 @@ const stats = [
   color: #fff;
   margin-top: 46px;
   text-align: center;
+  position: relative;
+  transition: color 0.4s ease;
 
   span {
     font-family: var(--font-family);
@@ -92,6 +128,9 @@ const stats = [
     font-size: 31px;
     text-align: center;
     color: var(--color-primary);
+    transition: color 0.4s ease;
+    display: inline-block;
+    transform: translateY(0);
   }
 }
 
@@ -102,5 +141,57 @@ const stats = [
   font-weight: var(--font-weight-bold);
   font-size: 19px;
   color: #f8fafc;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUp 0.5s ease forwards 1.2s;
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) rotateY(15deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-3px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes count-up {
+  from {
+    opacity: 0.5;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

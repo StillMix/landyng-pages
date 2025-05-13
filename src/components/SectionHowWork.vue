@@ -81,6 +81,9 @@ const scrollToSection = (sectionId: string) => {
       margin-right: auto;
       margin-top: 7px;
       position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out forwards;
+
       &__img {
         position: absolute;
         top: 0;
@@ -88,7 +91,9 @@ const scrollToSection = (sectionId: string) => {
         left: 0;
         width: 100%;
         height: 100%;
+        animation: slowZoom 30s infinite alternate ease-in-out;
       }
+
       &-left {
         position: absolute;
         justify-content: center;
@@ -97,6 +102,8 @@ const scrollToSection = (sectionId: string) => {
         flex-wrap: wrap;
         display: flex;
         width: 868px;
+        z-index: 2;
+        perspective: 1000px;
       }
     }
 
@@ -110,6 +117,46 @@ const scrollToSection = (sectionId: string) => {
       background: #fff !important;
       display: flex !important;
       flex-direction: column !important;
+      opacity: 0;
+      transform: translateY(30px) rotateX(10deg);
+      position: relative;
+
+      /* Анимация появления карточек с задержкой */
+      @for $i from 1 through 4 {
+        &:nth-child(#{$i}) {
+          animation: cardAppear
+            0.8s
+            cubic-bezier(0.175, 0.885, 0.32, 1.275)
+            forwards
+            #{0.3 +
+            $i *
+            0.2}s;
+        }
+      }
+
+      /* Синий кружок, который появляется при наведении */
+      &::after {
+        content: '';
+        position: absolute;
+        right: -20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+      }
+
+      /* Эффект при наведении - ТОЛЬКО появление кружка без поднятия карточки */
+      &:hover {
+        &::after {
+          opacity: 1;
+          right: 10px;
+        }
+      }
 
       &-title {
         font-family: var(--font-family);
@@ -130,6 +177,24 @@ const scrollToSection = (sectionId: string) => {
 
         span {
           font-weight: var(--font-weight-semibold);
+          color: var(--color-primary);
+          position: relative;
+          display: inline-block;
+
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--color-primary);
+            transition: width 0.3s ease;
+          }
+        }
+
+        &:hover span::after {
+          width: 100%;
         }
       }
     }
@@ -141,6 +206,9 @@ const scrollToSection = (sectionId: string) => {
       color: var(--color-text-dark);
       text-align: center;
       margin-top: 35px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.7s ease forwards 1.5s;
     }
 
     &__btn {
@@ -148,15 +216,75 @@ const scrollToSection = (sectionId: string) => {
       margin-top: 51px;
       margin-left: auto;
       margin-right: auto;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeInUp 0.6s ease forwards 1.8s;
     }
 
     &__arrow {
       margin-top: 24px;
       display: block;
-      transform: rotate(-90deg);
+      transform: rotate(-90deg) translateY(20px);
       margin-left: auto;
       margin-right: auto;
+      opacity: 0;
+      animation:
+        floatArrow 0.6s ease forwards 2s,
+        bounceArrow 2s infinite ease-in-out 2.6s;
     }
+  }
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) rotateX(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+@keyframes floatArrow {
+  0% {
+    opacity: 0;
+    transform: rotate(-90deg) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-90deg) translateY(0);
+  }
+}
+
+@keyframes bounceArrow {
+  0%,
+  100% {
+    transform: rotate(-90deg) translateX(0);
+  }
+  50% {
+    transform: rotate(-90deg) translateX(10px);
+  }
+}
+
+@keyframes slowZoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
   }
 }
 </style>

@@ -49,6 +49,29 @@ const servicesList = [
   margin-left: auto;
   margin-top: 28px;
   margin-right: auto;
+  overflow: hidden;
+  position: relative;
+  animation: fadeIn 0.8s ease-out forwards;
+
+  /* Эффект свечения при наведении */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(255, 255, 255, 0) 60%);
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &:hover::before {
+    opacity: 1;
+    animation: pulse 3s infinite ease-in-out;
+  }
 
   &-info {
     flex-shrink: 0;
@@ -56,6 +79,8 @@ const servicesList = [
     display: flex;
     flex-direction: column;
     gap: 33px;
+    position: relative;
+    z-index: 2;
 
     &__title {
       font-family: var(--font-family);
@@ -64,6 +89,21 @@ const servicesList = [
       color: var(--color-text-dark);
       width: 100%;
       margin: 0;
+      transform: translateX(-30px);
+      opacity: 0;
+      animation: slideInRight 0.7s ease forwards 0.3s;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--color-primary);
+        animation: lineExpand 1.2s ease forwards 0.8s;
+      }
     }
 
     &-item {
@@ -71,6 +111,15 @@ const servicesList = [
       align-items: center;
       width: 100%;
       gap: 7px;
+      transform: translateX(-20px);
+      opacity: 0;
+
+      /* Задержка анимации для каждого элемента */
+      @for $i from 1 through 6 {
+        &:nth-child(#{$i + 1}) {
+          animation: slideInRight 0.6s ease forwards #{0.5 + $i * 0.15}s;
+        }
+      }
 
       &__bullet {
         border-radius: 100%;
@@ -78,6 +127,8 @@ const servicesList = [
         width: 14px;
         flex-shrink: 0;
         height: 14px;
+        transform: scale(0);
+        animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1.5s;
       }
 
       &__text {
@@ -87,6 +138,21 @@ const servicesList = [
         line-height: 105%;
         color: var(--color-text-gray);
         margin: 0;
+        transition:
+          transform 0.3s ease,
+          color 0.3s ease;
+      }
+
+      &:hover {
+        .about-us-popup-info-item__bullet {
+          box-shadow: 0 0 15px 3px rgba(59, 130, 246, 0.3);
+          transition: box-shadow 0.3s ease;
+        }
+
+        .about-us-popup-info-item__text {
+          transform: translateX(5px);
+          color: var(--color-primary);
+        }
       }
     }
   }
@@ -100,11 +166,122 @@ const servicesList = [
     align-items: center;
     justify-content: center;
     background: #fff;
+    transform: translateX(50px) scale(0.9);
+    opacity: 0;
+    animation: slideInLeft 0.8s ease forwards 1s;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    border-radius: 12px;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    &:hover {
+      transform: scale(1.02) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
 
     img {
       width: 416px;
       height: 399px;
+      transition: transform 0.8s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
     }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -100%;
+      width: 50%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(30deg);
+      animation: shineEffect 3s infinite ease-in-out;
+      animation-delay: 2s;
+    }
+  }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(50px) scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lineExpand {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 80px;
+  }
+}
+
+@keyframes shineEffect {
+  0% {
+    left: -100%;
+  }
+  20% {
+    left: 120%;
+  }
+  100% {
+    left: 120%;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scale(0.95);
   }
 }
 </style>

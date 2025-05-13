@@ -98,6 +98,23 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
     @include styles.section-dark;
     height: var(--section-contact-height);
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
+
+    /* Фоновый эффект "звездного неба" */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 20%);
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in forwards 0.5s;
+    }
 
     &__popup {
       margin-top: 59px;
@@ -109,6 +126,23 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
       box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.1);
       display: flex;
       overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.2s;
+      position: relative;
+
+      /* Эффект свечения при появлении */
+      &::after {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 300%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+        opacity: 0;
+        animation: pulseGlow 3s ease-out forwards 1s;
+      }
 
       &-left {
         flex-shrink: 0;
@@ -116,9 +150,26 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
         height: 100%;
         width: 426px;
         padding-left: 36px;
+        position: relative;
+        z-index: 2;
+
+        /* Подстветка контура границы */
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 1px;
+          height: 0;
+          background: linear-gradient(to bottom, transparent, rgba(59, 130, 246, 0.5), transparent);
+          animation: borderGlow 1.5s ease forwards 1.2s;
+        }
 
         &__logo {
           margin-top: 51px;
+          opacity: 0;
+          transform: translateY(15px);
+          animation: fadeInUp 0.6s ease forwards 0.8s;
         }
 
         &__title {
@@ -127,6 +178,22 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
           font-weight: var(--font-weight-regular);
           font-size: 28px;
           color: #fff;
+          opacity: 0;
+          transform: translateX(-20px);
+          animation: fadeInRight 0.7s ease forwards 1s;
+          position: relative;
+
+          /* Подчеркивание заголовка */
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-primary);
+            animation: lineExpand 0.8s ease forwards 1.5s;
+          }
         }
 
         &__subtitle {
@@ -137,6 +204,8 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
           color: var(--color-text-light-gray);
           line-height: 185%;
           width: 363px;
+          opacity: 0;
+          animation: fadeIn 0.8s ease forwards 1.3s;
         }
 
         &-cards {
@@ -150,12 +219,33 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
             width: 363px;
             align-items: center;
             gap: 13px;
+            opacity: 0;
+            transform: translateX(-15px);
+
+            /* Появление карточек с интервалом */
+            @for $i from 1 through 3 {
+              &:nth-child(#{$i}) {
+                animation: fadeInRight 0.7s ease forwards #{1.5 + $i * 0.15}s;
+              }
+            }
+
+            &:hover {
+              .section-contact__popup-left-cards__card__img {
+                background: rgba(59, 130, 246, 0.2);
+                transform: scale(1.08);
+              }
+
+              .section-contact__popup-left-cards__card-con__subtitle {
+                color: rgba(255, 255, 255, 0.7);
+              }
+            }
 
             &__img {
               @include styles.icon-container-light;
               flex-shrink: 0;
               width: 40px;
               height: 40px;
+              transition: all 0.3s ease;
             }
 
             &-con {
@@ -180,6 +270,7 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
                 font-size: var(--font-size-medium);
                 line-height: 100%;
                 color: #6b7280;
+                transition: color 0.3s ease;
               }
             }
           }
@@ -189,6 +280,11 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
       &-right {
         width: 100%;
         background: #fff;
+        position: relative;
+        z-index: 2;
+        transform: translateX(30px);
+        opacity: 0;
+        animation: fadeInLeft 0.7s ease forwards 0.5s;
 
         &__title {
           text-align: center;
@@ -198,6 +294,8 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
           font-size: 22px;
           line-height: 100%;
           color: #000;
+          opacity: 0;
+          animation: fadeIn 0.6s ease forwards 1.2s;
         }
 
         &-inputs {
@@ -212,6 +310,15 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
             display: flex;
             flex-direction: column;
             gap: 13px;
+            opacity: 0;
+            transform: translateY(15px);
+
+            /* Появление полей формы с задержкой */
+            @for $i from 1 through 4 {
+              &:nth-child(#{$i}) {
+                animation: fadeInUp 0.5s ease forwards #{1.3 + $i * 0.1}s;
+              }
+            }
 
             &__title {
               font-family: var(--font-family);
@@ -227,6 +334,19 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               border-radius: 5px;
               width: 260px;
               height: 44px;
+              transition:
+                border 0.3s ease,
+                box-shadow 0.3s ease;
+
+              &:focus {
+                border-color: var(--color-primary);
+                box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+                outline: none;
+              }
+
+              &:hover {
+                border-color: #cbd5e1;
+              }
             }
 
             &__inputtext {
@@ -236,6 +356,19 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               width: 537px;
               height: 118px;
               resize: none;
+              transition:
+                border 0.3s ease,
+                box-shadow 0.3s ease;
+
+              &:focus {
+                border-color: var(--color-primary);
+                box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+                outline: none;
+              }
+
+              &:hover {
+                border-color: #cbd5e1;
+              }
             }
           }
         }
@@ -248,6 +381,9 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
           width: 533px;
           gap: 15px;
           margin-top: 35px;
+          opacity: 0;
+          transform: translateY(10px);
+          animation: fadeInUp 0.5s ease forwards 1.8s;
 
           &-label {
             width: 17px;
@@ -270,7 +406,9 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               border: 1px solid #a5bad5;
               border-radius: 2px;
               z-index: 1;
-              transition: background 0.3s ease;
+              transition:
+                background 0.3s ease,
+                border 0.3s ease;
               position: relative;
               overflow: hidden;
 
@@ -283,8 +421,12 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
                 height: 100%;
                 background: var(--bg-dark-section);
                 transform: scale(0);
-                transition: transform 0.3s ease;
+                transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 z-index: 0;
+              }
+
+              &:hover {
+                border-color: var(--color-primary);
               }
             }
 
@@ -293,11 +435,8 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
               transform: scale(1);
             }
 
-            &__input {
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              opacity: 0;
+            input[type='checkbox']:checked + .section-contact__popup-right-check-label__checkbox {
+              border-color: var(--color-primary);
             }
           }
 
@@ -314,10 +453,91 @@ import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
             margin-top: 38px;
             margin-left: auto;
             margin-right: auto;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 0.6s ease forwards 2s;
           }
         }
       }
     }
+  }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes lineExpand {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 60px;
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    height: 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    height: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
   }
 }
 </style>

@@ -102,6 +102,7 @@ defineProps({
 
 <style lang="scss" scoped>
 .app-card {
+  overflow: hidden;
   &--dark {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
@@ -141,7 +142,7 @@ defineProps({
       p {
         font-family: var(--font-family);
         font-weight: 600;
-        font-size: 18px;
+        font-size: 17px;
         color: #000;
       }
     }
