@@ -1,3 +1,4 @@
+<!-- src/components/SectionCompanes.vue -->
 <template>
   <div class="section-companes">
     <p class="section-title-light">Нам доверяют</p>
@@ -6,45 +7,49 @@
       надежности, безопасности и инновациям особенно высоки. Нашими клиентами становятся те, кто не
       может позволить себе компромиссов.
     </p>
-    <div class="section-companes__marquee">
-      <div class="section-companes__track">
-        <div class="section-companes__logos">
-          <img src="../assets/images/LogoCompanes/01.png" />
-          <img src="../assets/images/LogoCompanes/02.png" />
-          <img src="../assets/images/LogoCompanes/03.png" />
-          <img src="../assets/images/LogoCompanes/04.png" />
-          <img src="../assets/images/LogoCompanes/05.png" />
-          <img src="../assets/images/LogoCompanes/06.png" />
-          <img src="../assets/images/LogoCompanes/07.png" />
-          <img src="../assets/images/LogoCompanes/08.png" />
-          <img src="../assets/images/LogoCompanes/09.png" />
-          <img src="../assets/images/LogoCompanes/10.png" />
-          <img src="../assets/images/LogoCompanes/11.png" />
-          <img src="../assets/images/LogoCompanes/12.png" />
-          <img src="../assets/images/LogoCompanes/13.png" />
-        </div>
-        <!-- Дубликат логотипов -->
-        <div class="section-companes__logos">
-          <img src="../assets/images/LogoCompanes/01.png" />
-          <img src="../assets/images/LogoCompanes/02.png" />
-          <img src="../assets/images/LogoCompanes/03.png" />
-          <img src="../assets/images/LogoCompanes/04.png" />
-          <img src="../assets/images/LogoCompanes/05.png" />
-          <img src="../assets/images/LogoCompanes/06.png" />
-          <img src="../assets/images/LogoCompanes/07.png" />
-          <img src="../assets/images/LogoCompanes/08.png" />
-          <img src="../assets/images/LogoCompanes/09.png" />
-          <img src="../assets/images/LogoCompanes/10.png" />
-          <img src="../assets/images/LogoCompanes/11.png" />
-          <img src="../assets/images/LogoCompanes/12.png" />
-          <img src="../assets/images/LogoCompanes/13.png" />
+    <AnimatedView>
+      <div class="section-companes__marquee" data-animation="fade-in">
+        <div class="section-companes__track">
+          <div class="section-companes__logos">
+            <img src="../assets/images/LogoCompanes/01.png" />
+            <img src="../assets/images/LogoCompanes/02.png" />
+            <img src="../assets/images/LogoCompanes/03.png" />
+            <img src="../assets/images/LogoCompanes/04.png" />
+            <img src="../assets/images/LogoCompanes/05.png" />
+            <img src="../assets/images/LogoCompanes/06.png" />
+            <img src="../assets/images/LogoCompanes/07.png" />
+            <img src="../assets/images/LogoCompanes/08.png" />
+            <img src="../assets/images/LogoCompanes/09.png" />
+            <img src="../assets/images/LogoCompanes/10.png" />
+            <img src="../assets/images/LogoCompanes/11.png" />
+            <img src="../assets/images/LogoCompanes/12.png" />
+            <img src="../assets/images/LogoCompanes/13.png" />
+          </div>
+          <!-- Дубликат логотипов -->
+          <div class="section-companes__logos">
+            <img src="../assets/images/LogoCompanes/01.png" />
+            <img src="../assets/images/LogoCompanes/02.png" />
+            <img src="../assets/images/LogoCompanes/03.png" />
+            <img src="../assets/images/LogoCompanes/04.png" />
+            <img src="../assets/images/LogoCompanes/05.png" />
+            <img src="../assets/images/LogoCompanes/06.png" />
+            <img src="../assets/images/LogoCompanes/07.png" />
+            <img src="../assets/images/LogoCompanes/08.png" />
+            <img src="../assets/images/LogoCompanes/09.png" />
+            <img src="../assets/images/LogoCompanes/10.png" />
+            <img src="../assets/images/LogoCompanes/11.png" />
+            <img src="../assets/images/LogoCompanes/12.png" />
+            <img src="../assets/images/LogoCompanes/13.png" />
+          </div>
         </div>
       </div>
-    </div>
+    </AnimatedView>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AnimatedView from '@/components/AnimatedView.vue'
+</script>
 
 <style lang="scss" scoped>
 @use '@/assets/styles/styles.scss';

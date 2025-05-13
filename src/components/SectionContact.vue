@@ -1,84 +1,122 @@
+<!-- src/components/SectionContact.vue -->
 <template>
   <div class="section-contact" id="section-contact">
     <p class="section-title-dark">СВЯЗАТЬСЯ С НАМИ</p>
-    <div class="section-contact__popup">
-      <div class="section-contact__popup-left">
-        <LogoIcon class="section-contact__popup-left__logo" />
-        <p class="section-contact__popup-left__title">Свяжитесь с нами</p>
-        <p class="section-contact__popup-left__subtitle">
-          Заполните форму или свяжитесь с нами напрямую через один из контактных каналов ниже. Мы
-          всегда рады обсудить ваши идеи и потребности.
-        </p>
-        <div class="section-contact__popup-left-cards">
-          <div class="section-contact__popup-left-cards__card">
-            <div class="section-contact__popup-left-cards__card__img">
-              <PhoneIcon fill="#3B82F6" />
-            </div>
-            <div class="section-contact__popup-left-cards__card-con">
-              <p class="section-contact__popup-left-cards__card-con__title">Телефон</p>
-              <p class="section-contact__popup-left-cards__card-con__subtitle">
-                +7 (904) 520-64-49
-              </p>
-            </div>
-          </div>
-          <div class="section-contact__popup-left-cards__card">
-            <div class="section-contact__popup-left-cards__card__img">
-              <EmailIcon fill="#3B82F6" />
-            </div>
-            <div class="section-contact__popup-left-cards__card-con">
-              <p class="section-contact__popup-left-cards__card-con__title">Электронная почта</p>
-              <p class="section-contact__popup-left-cards__card-con__subtitle">info@onr-kursk.ru</p>
-            </div>
-          </div>
-          <div class="section-contact__popup-left-cards__card">
-            <div class="section-contact__popup-left-cards__card__img">
-              <GPSIcon fill="#3B82F6" />
-            </div>
-            <div class="section-contact__popup-left-cards__card-con">
-              <p class="section-contact__popup-left-cards__card-con__title">Адрес</p>
-              <p class="section-contact__popup-left-cards__card-con__subtitle">
-                ул. Карла Маркса, 101А, Курск, 305514
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <form class="section-contact__popup-right">
-        <p class="section-contact__popup-right__title">Отправить сообщение</p>
-        <div class="section-contact__popup-right-inputs">
-          <label class="section-contact__popup-right-inputs-label">
-            <p class="section-contact__popup-right-inputs-label__title">Ваше имя*</p>
-            <input class="section-contact__popup-right-inputs-label__input" />
-          </label>
-          <label class="section-contact__popup-right-inputs-label">
-            <p class="section-contact__popup-right-inputs-label__title">Телефон*</p>
-            <input class="section-contact__popup-right-inputs-label__input" />
-          </label>
-          <label class="section-contact__popup-right-inputs-label">
-            <p class="section-contact__popup-right-inputs-label__title">Email*</p>
-            <input class="section-contact__popup-right-inputs-label__input" />
-          </label>
-          <label class="section-contact__popup-right-inputs-label">
-            <p class="section-contact__popup-right-inputs-label__title">Сообщение</p>
-            <textarea class="section-contact__popup-right-inputs-label__inputtext" />
-          </label>
-        </div>
-        <div class="section-contact__popup-right-check">
-          <label class="section-contact__popup-right-check-label">
-            <input class="section-contact__popup-right-check-label__input" type="checkbox" />
-            <div class="section-contact__popup-right-check-label__checkbox"></div>
-          </label>
-
-          <p class="section-contact__popup-right-check__text">
-            Я даю согласие на обработку персональных данных и ознакомлен(а) с политикой
-            конфиденциальности
+    <AnimatedView>
+      <div class="section-contact__popup" data-animation="fade-in-up" style="animation-delay: 0.2s">
+        <div class="section-contact__popup-left">
+          <LogoIcon
+            class="section-contact__popup-left__logo"
+            data-animation="fade-in-up"
+            style="animation-delay: 0.8s"
+          />
+          <p
+            class="section-contact__popup-left__title"
+            data-animation="fade-in-right"
+            style="animation-delay: 1s"
+          >
+            Свяжитесь с нами
           </p>
+          <p
+            class="section-contact__popup-left__subtitle"
+            data-animation="fade-in"
+            style="animation-delay: 1.3s"
+          >
+            Заполните форму или свяжитесь с нами напрямую через один из контактных каналов ниже. Мы
+            всегда рады обсудить ваши идеи и потребности.
+          </p>
+          <div class="section-contact__popup-left-cards">
+            <div
+              v-for="(i, index) in 3"
+              :key="index"
+              class="section-contact__popup-left-cards__card"
+              :data-animation="'fade-in-right'"
+              :style="`animation-delay: ${1.5 + index * 0.15}s`"
+            >
+              <div class="section-contact__popup-left-cards__card__img" v-if="index === 0">
+                <PhoneIcon fill="#3B82F6" />
+              </div>
+              <div class="section-contact__popup-left-cards__card__img" v-if="index === 1">
+                <EmailIcon fill="#3B82F6" />
+              </div>
+              <div class="section-contact__popup-left-cards__card__img" v-if="index === 2">
+                <GPSIcon fill="#3B82F6" />
+              </div>
+              <div class="section-contact__popup-left-cards__card-con">
+                <p class="section-contact__popup-left-cards__card-con__title" v-if="index === 0">
+                  Телефон
+                </p>
+                <p class="section-contact__popup-left-cards__card-con__title" v-if="index === 1">
+                  Электронная почта
+                </p>
+                <p class="section-contact__popup-left-cards__card-con__title" v-if="index === 2">
+                  Адрес
+                </p>
+                <p class="section-contact__popup-left-cards__card-con__subtitle" v-if="index === 0">
+                  +7 (904) 520-64-49
+                </p>
+                <p class="section-contact__popup-left-cards__card-con__subtitle" v-if="index === 1">
+                  info@onr-kursk.ru
+                </p>
+                <p class="section-contact__popup-left-cards__card-con__subtitle" v-if="index === 2">
+                  ул. Карла Маркса, 101А, Курск, 305514
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <AppButon type="submit" class="section-contact__popup-right-check__btn" blue
-          >Отправить <ArrowOneLine />
-        </AppButon>
-      </form>
-    </div>
+        <form
+          class="section-contact__popup-right"
+          data-animation="fade-in-left"
+          style="animation-delay: 0.5s"
+        >
+          <p
+            class="section-contact__popup-right__title"
+            data-animation="fade-in"
+            style="animation-delay: 1.2s"
+          >
+            Отправить сообщение
+          </p>
+          <div class="section-contact__popup-right-inputs">
+            <label
+              v-for="(item, index) in ['Ваше имя*', 'Телефон*', 'Email*', 'Сообщение']"
+              :key="index"
+              class="section-contact__popup-right-inputs-label"
+              :data-animation="'fade-in-up'"
+              :style="`animation-delay: ${1.3 + index * 0.1}s`"
+            >
+              <p class="section-contact__popup-right-inputs-label__title">{{ item }}</p>
+              <input v-if="index < 3" class="section-contact__popup-right-inputs-label__input" />
+              <textarea v-else class="section-contact__popup-right-inputs-label__inputtext" />
+            </label>
+          </div>
+          <div
+            class="section-contact__popup-right-check"
+            data-animation="fade-in-up"
+            style="animation-delay: 1.8s"
+          >
+            <label class="section-contact__popup-right-check-label">
+              <input class="section-contact__popup-right-check-label__input" type="checkbox" />
+              <div class="section-contact__popup-right-check-label__checkbox"></div>
+            </label>
+
+            <p class="section-contact__popup-right-check__text">
+              Я даю согласие на обработку персональных данных и ознакомлен(а) с политикой
+              конфиденциальности
+            </p>
+          </div>
+          <AppButon
+            type="submit"
+            class="section-contact__popup-right-check__btn"
+            blue
+            data-animation="fade-in-up"
+            style="animation-delay: 2s"
+          >
+            Отправить <ArrowOneLine />
+          </AppButon>
+        </form>
+      </div>
+    </AnimatedView>
   </div>
 </template>
 
@@ -89,6 +127,7 @@ import LogoIcon from '@/assets/icons/LogoIcon.vue'
 import PhoneIcon from '@/assets/icons/PhoneIcon.vue'
 import AppButon from './UI/AppButon.vue'
 import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
+import AnimatedView from '@/components/AnimatedView.vue'
 </script>
 
 <style lang="scss" scoped>

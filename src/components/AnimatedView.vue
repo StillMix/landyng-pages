@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
-// Экспортируем свойства из родительского компонента
 const props = defineProps({
   threshold: {
     type: Number,
-    default: 0.2, // Порог видимости по умолчанию (20%)
+    default: 0.2,
   },
   rootMargin: {
     type: String,
-    default: '0px', // Отступ по умолчанию
+    default: '0px',
   },
   once: {
     type: Boolean,
-    default: true, // По умолчанию анимация запускается только один раз
+    default: true,
   },
 })
 
@@ -27,7 +26,6 @@ onMounted(() => {
       (entries) => {
         const [entry] = entries
         isVisible.value = entry.isIntersecting
-        // Если установлен флаг "один раз" и элемент видим, отключаем наблюдение
         if (props.once && entry.isIntersecting && observer) {
           observer.disconnect()
         }
@@ -42,7 +40,6 @@ onMounted(() => {
       observer.observe(elementRef.value)
     }
   } else {
-    // Запасной вариант, если браузер не поддерживает IntersectionObserver
     isVisible.value = true
   }
 })
@@ -63,12 +60,10 @@ onUnmounted(() => {
 </template>
 
 <style>
-/* Базовый класс для анимированных элементов */
 .is-visible [data-animation] {
   animation-play-state: running !important;
 }
 
-/* Скрытое состояние для всех анимируемых элементов */
 [data-animation] {
   animation-play-state: paused !important;
   animation-fill-mode: both !important;

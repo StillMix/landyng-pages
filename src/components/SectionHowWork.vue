@@ -1,25 +1,44 @@
+<!-- src/components/SectionHowWork.vue -->
 <template>
   <AppSection id="section-numbers" title="Как мы работаем" theme="light">
-    <div class="section-howWork-cards">
-      <img class="section-howWork-cards__img" src="../assets/images/SectionHowWorkImgBck.png" />
-      <div class="section-howWork-cards-left">
-        <AppCard
-          v-for="(step, index) in workSteps"
-          :key="index"
-          theme="light"
-          :icon="step.icon"
-          :headerTitle="step.title"
-          class="section-howWork-card"
-        >
-          <p class="section-howWork-card-text" v-html="step.text"></p>
-        </AppCard>
+    <AnimatedView>
+      <div class="section-howWork-cards" data-animation="fade-in-up">
+        <img class="section-howWork-cards__img" src="../assets/images/SectionHowWorkImgBck.png" />
+        <div class="section-howWork-cards-left">
+          <AppCard
+            v-for="(step, index) in workSteps"
+            :key="index"
+            theme="light"
+            :icon="step.icon"
+            :headerTitle="step.title"
+            class="section-howWork-card"
+            :data-animation="'fade-in-up'"
+            :style="`animation-delay: ${0.3 + index * 0.2}s`"
+          >
+            <p class="section-howWork-card-text" v-html="step.text"></p>
+          </AppCard>
+        </div>
       </div>
-    </div>
-    <p class="section-howWork__title">Готовы начать сотрудничество?</p>
-    <AppButon @click="scrollToSection('section-contact')" blue class="section-howWork__btn"
-      >Связаться с нами</AppButon
-    >
-    <ArrowTwoLine class="section-howWork__arrow" :width="41" :height="41" fill="#797B7D" />
+      <p class="section-howWork__title" data-animation="fade-in-up" style="animation-delay: 1.5s">
+        Готовы начать сотрудничество?
+      </p>
+      <AppButon
+        @click="scrollToSection('section-contact')"
+        blue
+        class="section-howWork__btn"
+        data-animation="fade-in-up"
+        style="animation-delay: 1.8s"
+        >Связаться с нами</AppButon
+      >
+      <ArrowTwoLine
+        class="section-howWork__arrow"
+        :width="41"
+        :height="41"
+        fill="#797B7D"
+        data-animation="fade-in-up"
+        style="animation-delay: 2s"
+      />
+    </AnimatedView>
   </AppSection>
 </template>
 
@@ -32,6 +51,7 @@ import PenIcon from '@/assets/icons/PenIcon.vue'
 import SearchIcon from '@/assets/icons/SearchIcon.vue'
 import AppButon from './UI/AppButon.vue'
 import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue'
+import AnimatedView from '@/components/AnimatedView.vue'
 
 const workSteps = [
   {

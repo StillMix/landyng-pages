@@ -1,3 +1,4 @@
+<!-- src/components/sectionMain.vue -->
 <template>
   <div
     class="section-main"
@@ -8,16 +9,34 @@
     }"
   >
     <div class="section-main__overlay"></div>
-    <div class="section-main__text">
-      <p class="section-main__text--title">Мы создаем надежные решения для Вас и Вашей компании</p>
-      <p class="section-main__text--subtitle">Мы и есть надежное решение Ваших задач!</p>
-      <div class="section-main__text--btn">
-        <AppButton @click="scrollToSection('section-decisions')" blue
-          >Наши решения <ArrowOneLine
-        /></AppButton>
-        <AppButton white text="Связаться с нами" @click="scrollToSection('section-contact')" />
+    <AnimatedView>
+      <div class="section-main__text" data-animation="fade-in">
+        <p
+          class="section-main__text--title"
+          data-animation="slide-in-left"
+          style="animation-delay: 0.3s"
+        >
+          Мы создаем надежные решения для Вас и Вашей компании
+        </p>
+        <p
+          class="section-main__text--subtitle"
+          data-animation="slide-in-left"
+          style="animation-delay: 0.5s"
+        >
+          Мы и есть надежное решение Ваших задач!
+        </p>
+        <div
+          class="section-main__text--btn"
+          data-animation="fade-in-up"
+          style="animation-delay: 0.7s"
+        >
+          <AppButton @click="scrollToSection('section-decisions')" blue
+            >Наши решения <ArrowOneLine
+          /></AppButton>
+          <AppButton white text="Связаться с нами" @click="scrollToSection('section-contact')" />
+        </div>
       </div>
-    </div>
+    </AnimatedView>
   </div>
 </template>
 
@@ -27,6 +46,7 @@ import backgroundImage1 from '@/assets/images/SectionMainImg1.png'
 import backgroundImage2 from '@/assets/images/SectionMainImg2.png'
 import backgroundImage3 from '@/assets/images/SectionMainImg3.png'
 import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
+import AnimatedView from '@/components/AnimatedView.vue'
 
 const backgrounds = [backgroundImage1, backgroundImage2, backgroundImage3]
 const currentBackground = ref(backgrounds[0])

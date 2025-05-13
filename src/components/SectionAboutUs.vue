@@ -1,3 +1,4 @@
+<!-- src/components/SectionAboutUs.vue -->
 <template>
   <AppSection
     id="section-about"
@@ -5,25 +6,40 @@
     subtitle="Мы — команда профессионалов с большим опытом научно-исследовательской работы в области создания информационных управляющих и аналитических систем. На протяжении многих лет мы успешно занимаемся программированием веб-приложений, разработкой распределённых информационно-аналитических, мониторинговых и управляющих систем, а также созданием программной и конструкторской документации в рамках НИОКР по ГОСТ."
     theme="light"
   >
-    <div class="about-us-popup">
-      <div class="about-us-popup-info">
-        <h3 class="about-us-popup-info__title">Делаем быстро и качественно</h3>
+    <AnimatedView>
+      <div class="about-us-popup" data-animation="fade-in">
+        <div class="about-us-popup-info">
+          <h3
+            class="about-us-popup-info__title"
+            data-animation="slide-in-right"
+            style="animation-delay: 0.3s"
+          >
+            Делаем быстро и качественно
+          </h3>
 
-        <div v-for="(item, index) in servicesList" :key="index" class="about-us-popup-info-item">
-          <div class="about-us-popup-info-item__bullet"></div>
-          <p class="about-us-popup-info-item__text">{{ item }}</p>
+          <div
+            v-for="(item, index) in servicesList"
+            :key="index"
+            class="about-us-popup-info-item"
+            :data-animation="'slide-in-right'"
+            :style="`animation-delay: ${0.5 + index * 0.15}s`"
+          >
+            <div class="about-us-popup-info-item__bullet"></div>
+            <p class="about-us-popup-info-item__text">{{ item }}</p>
+          </div>
+        </div>
+
+        <div class="about-us-popup__img" data-animation="slide-in-left" style="animation-delay: 1s">
+          <img src="../assets/images/SectionAboutUs.png" alt="О нас" />
         </div>
       </div>
-
-      <div class="about-us-popup__img">
-        <img src="../assets/images/SectionAboutUs.png" alt="О нас" />
-      </div>
-    </div>
+    </AnimatedView>
   </AppSection>
 </template>
 
 <script setup lang="ts">
 import AppSection from '@/components/UI/AppSection.vue'
+import AnimatedView from '@/components/AnimatedView.vue'
 
 const servicesList = [
   'Предпроектное обследование и определение путей решения проблем заказчиков',

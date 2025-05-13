@@ -142,11 +142,9 @@ import NewPageIcon from '@/assets/icons/NewPageIcon.vue'
 import usePdfViewer from '@/composables/usePdfViewer'
 import BackPreaentation from '@/assets/icons/BackPreaentation.vue'
 
-// Путь к PDF-файлу
 const pdfSrc = '/src/assets/pdf/PresONR.pdf'
 const pdfjsWorkerSrc = '/pdfjs/build/pdf.worker.mjs'
 
-// Используем композабл и получаем все возвращаемые значения
 const {
   displayMode,
   pdfCanvas,
