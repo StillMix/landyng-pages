@@ -1,4 +1,3 @@
-<!-- src/components/SectionContact.vue -->
 <template>
   <div class="section-contact" id="section-contact">
     <p class="section-title-dark">СВЯЗАТЬСЯ С НАМИ</p>
@@ -65,7 +64,20 @@
             </div>
           </div>
         </div>
+
+        <!-- Форма успешно отправлена -->
+        <div v-if="formState.submitted" class="section-contact__popup-success">
+          <div class="section-contact__popup-success__icon">
+            <CheckIcon :width="60" :height="60" fill="#3B82F6" />
+          </div>
+          <h3>Спасибо за ваше сообщение!</h3>
+          <p>Мы получили ваш запрос и свяжемся с вами в ближайшее время.</p>
+        </div>
+
+        <!-- Форма -->
         <form
+          v-else
+          @submit="handleSubmit"
           class="section-contact__popup-right"
           data-animation="fade-in-left"
           style="animation-delay: 0.5s"
@@ -77,26 +89,86 @@
           >
             Отправить сообщение
           </p>
+
           <div class="section-contact__popup-right-inputs">
+            <!-- Имя -->
             <label
-              v-for="(item, index) in ['Ваше имя*', 'Телефон*', 'Email*', 'Сообщение']"
-              :key="index"
               class="section-contact__popup-right-inputs-label"
-              :data-animation="'fade-in-up'"
-              :style="`animation-delay: ${1.3 + index * 0.1}s`"
+              :class="{ 'has-error': errors.name }"
+              data-animation="fade-in-up"
+              style="animation-delay: 1.3s"
             >
-              <p class="section-contact__popup-right-inputs-label__title">{{ item }}</p>
-              <input v-if="index < 3" class="section-contact__popup-right-inputs-label__input" />
-              <textarea v-else class="section-contact__popup-right-inputs-label__inputtext" />
+              <p class="section-contact__popup-right-inputs-label__title">Ваше имя*</p>
+              <input
+                v-model="formState.name"
+                @blur="validateName"
+                class="section-contact__popup-right-inputs-label__input"
+              />
+              <span v-if="errors.name" class="input-error">{{ errors.name }}</span>
+            </label>
+
+            <!-- Телефон -->
+            <label
+              class="section-contact__popup-right-inputs-label"
+              :class="{ 'has-error': errors.phone }"
+              data-animation="fade-in-up"
+              style="animation-delay: 1.4s"
+            >
+              <p class="section-contact__popup-right-inputs-label__title">Телефон*</p>
+              <input
+                v-model="formState.phone"
+                @blur="validatePhone"
+                class="section-contact__popup-right-inputs-label__input"
+                placeholder="+7 (XXX) XXX-XX-XX"
+              />
+              <span v-if="errors.phone" class="input-error">{{ errors.phone }}</span>
+            </label>
+
+            <!-- Email -->
+            <label
+              class="section-contact__popup-right-inputs-label"
+              :class="{ 'has-error': errors.email }"
+              data-animation="fade-in-up"
+              style="animation-delay: 1.5s"
+            >
+              <p class="section-contact__popup-right-inputs-label__title">Email*</p>
+              <input
+                v-model="formState.email"
+                @blur="validateEmail"
+                class="section-contact__popup-right-inputs-label__input"
+                type="email"
+              />
+              <span v-if="errors.email" class="input-error">{{ errors.email }}</span>
+            </label>
+
+            <!-- Сообщение -->
+            <label
+              class="section-contact__popup-right-inputs-label"
+              data-animation="fade-in-up"
+              style="animation-delay: 1.6s"
+            >
+              <p class="section-contact__popup-right-inputs-label__title">Сообщение</p>
+              <textarea
+                v-model="formState.message"
+                class="section-contact__popup-right-inputs-label__inputtext"
+              ></textarea>
             </label>
           </div>
+
+          <!-- Согласие -->
           <div
             class="section-contact__popup-right-check"
+            :class="{ 'has-error': errors.agreement }"
             data-animation="fade-in-up"
             style="animation-delay: 1.8s"
           >
             <label class="section-contact__popup-right-check-label">
-              <input class="section-contact__popup-right-check-label__input" type="checkbox" />
+              <input
+                v-model="formState.agreement"
+                @change="validateAgreement"
+                class="section-contact__popup-right-check-label__input"
+                type="checkbox"
+              />
               <div class="section-contact__popup-right-check-label__checkbox"></div>
             </label>
 
@@ -105,14 +177,23 @@
               конфиденциальности
             </p>
           </div>
+
+          <!-- Сообщение об ошибке -->
+          <div v-if="submitError" class="form-error-message">
+            Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.
+          </div>
+
+          <!-- Кнопка отправки -->
           <AppButon
             type="submit"
             class="section-contact__popup-right-check__btn"
             blue
             data-animation="fade-in-up"
             style="animation-delay: 2s"
+            :disabled="isSubmitting"
           >
-            Отправить <ArrowOneLine />
+            <span v-if="isSubmitting">Отправка...</span>
+            <span v-else>Отправить <ArrowOneLine /></span>
           </AppButon>
         </form>
       </div>
@@ -121,6 +202,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, reactive } from 'vue'
 import EmailIcon from '@/assets/icons/EmailIcon.vue'
 import GPSIcon from '@/assets/icons/GPSIcon.vue'
 import LogoIcon from '@/assets/icons/LogoIcon.vue'
@@ -128,6 +210,123 @@ import PhoneIcon from '@/assets/icons/PhoneIcon.vue'
 import AppButon from './UI/AppButon.vue'
 import ArrowOneLine from '@/assets/icons/ArrowOneLine.vue'
 import AnimatedView from '@/components/AnimatedView.vue'
+
+// Состояние формы
+const formState = reactive({
+  name: '',
+  phone: '',
+  email: '',
+  message: '',
+  agreement: false,
+  submitted: false,
+})
+
+// Ошибки
+const errors = reactive({
+  name: '',
+  phone: '',
+  email: '',
+  message: '',
+  agreement: '',
+})
+
+// Статус формы
+const isSubmitting = ref(false)
+const submitSuccess = ref(false)
+const submitError = ref(false)
+
+// Валидация полей
+const validateName = () => {
+  errors.name = ''
+  if (!formState.name.trim()) {
+    errors.name = 'Пожалуйста, введите ваше имя'
+    return false
+  }
+  return true
+}
+
+const validatePhone = () => {
+  errors.phone = ''
+  const phoneRegex = /^(\+7|8)[- ]?\(?[0-9]{3}\)?[- ]?[0-9]{3}[- ]?[0-9]{2}[- ]?[0-9]{2}$/
+  if (!formState.phone.trim()) {
+    errors.phone = 'Пожалуйста, введите номер телефона'
+    return false
+  } else if (!phoneRegex.test(formState.phone)) {
+    errors.phone = 'Пожалуйста, введите корректный номер телефона'
+    return false
+  }
+  return true
+}
+
+const validateEmail = () => {
+  errors.email = ''
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!formState.email.trim()) {
+    errors.email = 'Пожалуйста, введите email'
+    return false
+  } else if (!emailRegex.test(formState.email)) {
+    errors.email = 'Пожалуйста, введите корректный email'
+    return false
+  }
+  return true
+}
+
+const validateAgreement = () => {
+  errors.agreement = ''
+  if (!formState.agreement) {
+    errors.agreement = 'Необходимо согласие на обработку персональных данных'
+    return false
+  }
+  return true
+}
+
+// Обработка отправки формы
+const handleSubmit = async (e: Event) => {
+  e.preventDefault()
+
+  // Валидируем все поля
+  const isNameValid = validateName()
+  const isPhoneValid = validatePhone()
+  const isEmailValid = validateEmail()
+  const isAgreementValid = validateAgreement()
+
+  // Если есть ошибки, прерываем отправку
+  if (!isNameValid || !isPhoneValid || !isEmailValid || !isAgreementValid) {
+    return
+  }
+
+  try {
+    isSubmitting.value = true
+
+    // Имитация отправки формы
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    // Успешная отправка
+    submitSuccess.value = true
+    formState.submitted = true
+
+    // Сбрасываем форму после успешной отправки
+    setTimeout(() => {
+      formState.name = ''
+      formState.phone = ''
+      formState.email = ''
+      formState.message = ''
+      formState.agreement = false
+      formState.submitted = false
+      submitSuccess.value = false
+    }, 3000)
+  } catch (error) {
+    console.error('Ошибка при отправке формы:', error)
+    submitError.value = true
+
+    // Сбрасываем ошибку через некоторое время
+    setTimeout(() => {
+      submitError.value = false
+    }, 3000)
+  } finally {
+    isSubmitting.value = false
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -181,6 +380,44 @@ import AnimatedView from '@/components/AnimatedView.vue'
         background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
         opacity: 0;
         animation: pulseGlow 3s ease-out forwards 1s;
+      }
+
+      /* Состояние успешной отправки */
+      &-success {
+        flex: 1;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 30px;
+        animation: fadeIn 0.6s ease-in-out;
+
+        &__icon {
+          background: rgba(59, 130, 246, 0.1);
+          border-radius: 50%;
+          width: 100px;
+          height: 100px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 20px;
+          animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        h3 {
+          font-size: 24px;
+          color: #0f172a;
+          margin-bottom: 10px;
+          font-weight: 600;
+        }
+
+        p {
+          color: #64748b;
+          font-size: 16px;
+          max-width: 70%;
+        }
       }
 
       &-left {
@@ -343,19 +580,30 @@ import AnimatedView from '@/components/AnimatedView.vue'
           display: flex;
           flex-wrap: wrap;
           width: 100%;
-          gap: 23px 14px;
+          gap: 8px 14px;
 
           &-label {
             display: flex;
             flex-direction: column;
-            gap: 13px;
+            gap: 10px;
             opacity: 0;
             transform: translateY(15px);
+            position: relative;
+            min-height: 87px;
 
             /* Появление полей формы с задержкой */
             @for $i from 1 through 4 {
               &:nth-child(#{$i}) {
                 animation: fadeInUp 0.5s ease forwards #{1.3 + $i * 0.1}s;
+              }
+            }
+
+            /* Состояние ошибки */
+            &.has-error {
+              .section-contact__popup-right-inputs-label__input,
+              .section-contact__popup-right-inputs-label__inputtext {
+                border-color: #ef4444;
+                background-color: rgba(239, 68, 68, 0.05);
               }
             }
 
@@ -375,7 +623,8 @@ import AnimatedView from '@/components/AnimatedView.vue'
               height: 44px;
               transition:
                 border 0.3s ease,
-                box-shadow 0.3s ease;
+                box-shadow 0.3s ease,
+                background-color 0.3s ease;
 
               &:focus {
                 border-color: var(--color-primary);
@@ -397,7 +646,8 @@ import AnimatedView from '@/components/AnimatedView.vue'
               resize: none;
               transition:
                 border 0.3s ease,
-                box-shadow 0.3s ease;
+                box-shadow 0.3s ease,
+                background-color 0.3s ease;
 
               &:focus {
                 border-color: var(--color-primary);
@@ -424,7 +674,16 @@ import AnimatedView from '@/components/AnimatedView.vue'
           transform: translateY(10px);
           animation: fadeInUp 0.5s ease forwards 1.8s;
 
+          /* Состояние ошибки */
+          &.has-error {
+            .section-contact__popup-right-check-label__checkbox {
+              border-color: #ef4444;
+              background-color: rgba(239, 68, 68, 0.05);
+            }
+          }
+
           &-label {
+            flex-shrink: 0;
             width: 17px;
             height: 17px;
             overflow: hidden;
@@ -447,7 +706,8 @@ import AnimatedView from '@/components/AnimatedView.vue'
               z-index: 1;
               transition:
                 background 0.3s ease,
-                border 0.3s ease;
+                border 0.3s ease,
+                background-color 0.3s ease;
               position: relative;
               overflow: hidden;
 
@@ -495,6 +755,16 @@ import AnimatedView from '@/components/AnimatedView.vue'
             opacity: 0;
             transform: translateY(15px);
             animation: fadeInUp 0.6s ease forwards 2s;
+
+            span {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+            }
+            &:disabled {
+              opacity: 0.7;
+              cursor: not-allowed;
+            }
           }
         }
       }
@@ -502,7 +772,39 @@ import AnimatedView from '@/components/AnimatedView.vue'
   }
 }
 
-/* Анимации */
+/* Стили для сообщений об ошибках */
+.input-error {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: -5px;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.agreement-error {
+  color: #ef4444;
+  font-size: 12px;
+  display: block;
+  text-align: center;
+  margin-top: 5px;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.form-error-message {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  margin: 15px auto;
+  width: 80%;
+  font-size: 14px;
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Дополнительные анимации */
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -577,6 +879,38 @@ import AnimatedView from '@/components/AnimatedView.vue'
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 </style>
