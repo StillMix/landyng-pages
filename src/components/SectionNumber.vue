@@ -1,29 +1,36 @@
 <template>
   <AppSection id="section-numbers" title="В ЦИФРАХ" theme="dark">
-    <p class="section-number__subtitle">Преобразуем идеи в цифровые решения</p>
+    <AnimatedView>
+      <p class="section-number__subtitle" data-animation="fade-in-up">
+        Преобразуем идеи в цифровые решения
+      </p>
 
-    <div class="section-number__cards">
-      <AppCard
-        v-for="(stat, index) in stats"
-        :key="index"
-        theme="dark"
-        :icon="stat.icon"
-        centered
-        contentCentered
-        size="default"
-      >
-        <p class="stat-number">
-          {{ stat.number }}<span>{{ stat.suffix }}</span>
-        </p>
-        <p class="stat-description">{{ stat.description }}</p>
-      </AppCard>
-    </div>
+      <div class="section-number__cards">
+        <AppCard
+          v-for="(stat, index) in stats"
+          :key="index"
+          theme="dark"
+          :icon="stat.icon"
+          centered
+          contentCentered
+          size="default"
+          :data-animation="`fade-in`"
+          :style="`animation-delay: ${0.3 + index * 0.2}s`"
+        >
+          <p class="stat-number">
+            {{ stat.number }}<span>{{ stat.suffix }}</span>
+          </p>
+          <p class="stat-description">{{ stat.description }}</p>
+        </AppCard>
+      </div>
+    </AnimatedView>
   </AppSection>
 </template>
 
 <script setup lang="ts">
 import AppSection from '@/components/UI/AppSection.vue'
 import AppCard from '@/components/UI/AppCard.vue'
+import AnimatedView from '@/components/AnimatedView.vue'
 import TimeIcon from '@/assets/icons/TimeIcon.vue'
 import BagIcon from '@/assets/icons/BagIcon.vue'
 import PeplesIcon from '@/assets/icons/PeplesIcon.vue'
