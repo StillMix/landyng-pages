@@ -1,4 +1,5 @@
 <template>
+  <AppMenu />
   <sectionMain />
   <SectionAboutUs />
   <SectionNumber />
@@ -20,6 +21,7 @@ import SectionAboutUs from '@/components/SectionAboutUs.vue'
 import SectionCompanes from '@/components/SectionCompanes.vue'
 import SectionDecisions from '@/components/SectionDecisions.vue'
 import SectionFooter from '@/components/SectionFooter.vue'
+import AppMenu from '@/components/AppMenu.vue'
 </script>
 
 <style lang="scss" scoped></style>

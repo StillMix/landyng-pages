@@ -25,7 +25,36 @@
             <img src="../assets/images/LogoCompanes/12.png" />
             <img src="../assets/images/LogoCompanes/13.png" />
           </div>
-
+          <div class="section-companes__logos">
+            <img src="../assets/images/LogoCompanes/01.png" />
+            <img src="../assets/images/LogoCompanes/02.png" />
+            <img src="../assets/images/LogoCompanes/03.png" />
+            <img src="../assets/images/LogoCompanes/04.png" />
+            <img src="../assets/images/LogoCompanes/05.png" />
+            <img src="../assets/images/LogoCompanes/06.png" />
+            <img src="../assets/images/LogoCompanes/07.png" />
+            <img src="../assets/images/LogoCompanes/08.png" />
+            <img src="../assets/images/LogoCompanes/09.png" />
+            <img src="../assets/images/LogoCompanes/10.png" />
+            <img src="../assets/images/LogoCompanes/11.png" />
+            <img src="../assets/images/LogoCompanes/12.png" />
+            <img src="../assets/images/LogoCompanes/13.png" />
+          </div>
+          <div class="section-companes__logos">
+            <img src="../assets/images/LogoCompanes/01.png" />
+            <img src="../assets/images/LogoCompanes/02.png" />
+            <img src="../assets/images/LogoCompanes/03.png" />
+            <img src="../assets/images/LogoCompanes/04.png" />
+            <img src="../assets/images/LogoCompanes/05.png" />
+            <img src="../assets/images/LogoCompanes/06.png" />
+            <img src="../assets/images/LogoCompanes/07.png" />
+            <img src="../assets/images/LogoCompanes/08.png" />
+            <img src="../assets/images/LogoCompanes/09.png" />
+            <img src="../assets/images/LogoCompanes/10.png" />
+            <img src="../assets/images/LogoCompanes/11.png" />
+            <img src="../assets/images/LogoCompanes/12.png" />
+            <img src="../assets/images/LogoCompanes/13.png" />
+          </div>
         </div>
       </div>
     </AnimatedView>
@@ -56,6 +85,7 @@ import AnimatedView from '@/components/AnimatedView.vue'
     display: flex;
     width: fit-content;
     animation: scroll-marquee 40s linear infinite;
+    gap: 30px;
   }
 
   &__logos {
