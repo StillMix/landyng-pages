@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import ArrowTwoLine from '@/assets/icons/ArrowTwoLine.vue';
-import Decisions from '@/features/Decisions.vue';
+import Decisions from '@/features/AppDecisions.vue';
 import AnimatedView from '@/components/AnimatedView.vue'
 </script>
 

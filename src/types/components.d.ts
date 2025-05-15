@@ -2,7 +2,9 @@
 import { DefineComponent, Component } from 'vue'
 
 // Общий тип для всех компонентов Vue
-export type VueComponent = Component | DefineComponent<any, any, any>
+export type VueComponent =
+  | Component
+  | DefineComponent<Record<string, unknown>, Record<string, unknown>, unknown>
 
 // Тип для иконок
 export interface IconProps {

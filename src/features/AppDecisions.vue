@@ -13,7 +13,12 @@
         </button>
       </div>
       <div class="slider-content">
-        <div v-for="(tab, index) in tabs" :key="index" class="slide-item" :class="{ active: currentTab === index }">
+        <div
+          v-for="(tab, index) in tabs"
+          :key="index"
+          class="slide-item"
+          :class="{ active: currentTab === index }"
+        >
           <div class="slide-inner">
             <div class="image-content">
               <div class="image-placeholder">Image Placeholder</div>
@@ -25,117 +30,126 @@
       </div>
     </div>
     <div class="button-block">
-      <div class="ad-text">С полным списком предлагаемых услуг можно ознакомиться в презентации</div>
+      <div class="ad-text">
+        С полным списком предлагаемых услуг можно ознакомиться в презентации
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
+// const emit = defineEmits<{
+//   (e: 'onClick', value: any): void
+// }>()
 
-const emit = defineEmits<{
-  (e: 'onClick', value: any): void
-}>()
-
-const handleClick = (event: any) => {
-  emit('onClick', event)
-    window.open('http://onr-kursk.ru/assets/PresONR.pdf')
-}
-
+// const handleClick = (event: MouseEvent) => {
+//   emit('onClick', event)
+//   window.open('http://onr-kursk.ru/assets/PresONR.pdf')
+// }
 
 interface Tab {
-  title: string;
-  description: string;
-  image: string;
+  title: string
+  description: string
+  image: string
 }
-
 
 const tabs = ref<Tab[]>([
   {
     title: 'Системы управления и мониторинга',
-    description: 'Специализированное программное обеспечение для автоматизации задач централизованного мониторинга, эксплуатации, поддержки и обслуживания информационной и телекоммуникационной инфраструктуры',
+    description:
+      'Специализированное программное обеспечение для автоматизации задач централизованного мониторинга, эксплуатации, поддержки и обслуживания информационной и телекоммуникационной инфраструктуры',
     image: '\\src\\assets\\slider\\image1.jpg',
   },
   {
     title: 'Вокодеры',
-    description: 'Программный или программно-аппаратный комплекс, предназначенный для передачи потоковых данных по сети по протоколу UDP между двумя узлами связи, как в одностороннем (симплекс), так и двухстороннем (дуплекс) режиме',
+    description:
+      'Программный или программно-аппаратный комплекс, предназначенный для передачи потоковых данных по сети по протоколу UDP между двумя узлами связи, как в одностороннем (симплекс), так и двухстороннем (дуплекс) режиме',
     image: '/assets/images/fundraising.jpg',
   },
   {
     title: 'Системы видеонаблюдения',
-    description: 'Специализированное программное обеспечение для организация видеонаблюдения с использованием видеокамер, размещенных на объектах наблюдения',
+    description:
+      'Специализированное программное обеспечение для организация видеонаблюдения с использованием видеокамер, размещенных на объектах наблюдения',
     image: '/assets/images/crm.jpg',
   },
   {
     title: 'Системы автоматизации тестирования',
-    description: 'Специализированное программное обеспечение для проведения всех видов испытаний, тестирования и моделирования разрабатываемых средств и комплексов связи, телекоммуникационного оборудования и программного обеспечения',
+    description:
+      'Специализированное программное обеспечение для проведения всех видов испытаний, тестирования и моделирования разрабатываемых средств и комплексов связи, телекоммуникационного оборудования и программного обеспечения',
     image: '/assets/images/investment-management.jpg',
   },
   {
     title: 'Системы управления БПЛА',
-    description: 'Специализированное программное обеспечение для организации автоматического/автоматизированного взаимодействия с (группами) БПЛА по беспроводным каналам связи',
+    description:
+      'Специализированное программное обеспечение для организации автоматического/автоматизированного взаимодействия с (группами) БПЛА по беспроводным каналам связи',
     image: '/assets/images/investor-reporting.jpg',
   },
   {
     title: 'Системы управления воздушным движением',
-    description: 'Программный комплекс, предназначенный для мониторинга местоположения воздушных судов, геопривязки местоположения воздушных судов, а также для создания и редактирования полетных заданий и их маршрутов',
+    description:
+      'Программный комплекс, предназначенный для мониторинга местоположения воздушных судов, геопривязки местоположения воздушных судов, а также для создания и редактирования полетных заданий и их маршрутов',
     image: '/assets/images/document-management.jpg',
   },
   {
     title: 'Системы информационной безопасности',
-    description: 'Специальное программное обеспечение для экспертной поддержки, визуализации и прогнозирования (моделирования) компьютерных атак реального времени',
+    description:
+      'Специальное программное обеспечение для экспертной поддержки, визуализации и прогнозирования (моделирования) компьютерных атак реального времени',
     image: '/assets/images/payments.jpg',
   },
   {
     title: 'Системы учета энергии',
-    description: 'Для формирования помесячного физического и стоимостного баланса тепловой энергии в тепловом узле с детализацией продажи и покупки тепловой энергии необходимой и достаточной для формирования отчетности для загрузки в SAP',
+    description:
+      'Для формирования помесячного физического и стоимостного баланса тепловой энергии в тепловом узле с детализацией продажи и покупки тепловой энергии необходимой и достаточной для формирования отчетности для загрузки в SAP',
     image: '',
   },
   {
     title: 'Блокчейн',
-    description: 'Специализированное программное обеспечение, разрабатываемое в интересах контролирующей организации, поставщиков и потребителей продукции с целью учета движения каждой уникально маркированной единицы (партии) продукции и выявления попыток сбыта фальсифицированной и контрафактной продукции',
+    description:
+      'Специализированное программное обеспечение, разрабатываемое в интересах контролирующей организации, поставщиков и потребителей продукции с целью учета движения каждой уникально маркированной единицы (партии) продукции и выявления попыток сбыта фальсифицированной и контрафактной продукции',
     image: '',
   },
   {
     title: 'Системы поиска, сбора, обработки и анализа информации',
-    description: 'Специальное программное обеспечение, предназначенное для организации целенаправленного мониторинга, сбора, аналитической обработки и формализованной визуализации информации, представленной в электронном виде в открытых источниках',
+    description:
+      'Специальное программное обеспечение, предназначенное для организации целенаправленного мониторинга, сбора, аналитической обработки и формализованной визуализации информации, представленной в электронном виде в открытых источниках',
     image: '',
   },
-]);
+])
 
-const currentTab = ref(0);
-let intervalId: number | null = null;
+const currentTab = ref(0)
+let intervalId: number | null = null
 
 const setTab = (index: number) => {
-  currentTab.value = index;
-  resetInterval();
-};
+  currentTab.value = index
+  resetInterval()
+}
 
 const nextTab = () => {
-  currentTab.value = (currentTab.value + 1) % tabs.value.length;
-};
+  currentTab.value = (currentTab.value + 1) % tabs.value.length
+}
 
 const startInterval = () => {
-  intervalId = window.setInterval(nextTab, 5000);
-};
+  intervalId = window.setInterval(nextTab, 5000)
+}
 
 const resetInterval = () => {
   if (intervalId) {
-    clearInterval(intervalId);
+    clearInterval(intervalId)
   }
-  startInterval();
-};
+  startInterval()
+}
 
 onMounted(() => {
-  startInterval();
-});
+  startInterval()
+})
 
 onBeforeUnmount(() => {
   if (intervalId) {
-    clearInterval(intervalId);
+    clearInterval(intervalId)
   }
-});
+})
 </script>
 
 <style lang="scss" scoped>
@@ -152,7 +166,7 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
-.hat-wrapper{
+.hat-wrapper {
   width: 100%;
   height: auto;
   display: flex;
@@ -161,7 +175,7 @@ onBeforeUnmount(() => {
   margin-bottom: 20px;
   padding: 0 15px;
 
-  .solution-text{
+  .solution-text {
     max-width: 1360px;
     width: 100%;
     align-self: center;
@@ -172,7 +186,7 @@ onBeforeUnmount(() => {
   }
 }
 
-.button-block{
+.button-block {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,7 +194,7 @@ onBeforeUnmount(() => {
   padding: 0 15px;
   margin-top: 20px;
 
-  .ad-text{
+  .ad-text {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 16px;
     padding-bottom: 15px;
@@ -344,7 +358,6 @@ onBeforeUnmount(() => {
   transform: scale(1.05);
 }
 
-
 @media (min-width: 768px) {
   .inner-wrapper {
     height: 1000px;
@@ -426,7 +439,7 @@ onBeforeUnmount(() => {
 }
 
 @media (min-width: 1024px) {
-  .slider-wrapper{
+  .slider-wrapper {
     border-radius: 17px;
   }
   .hat-wrapper {
@@ -446,7 +459,7 @@ onBeforeUnmount(() => {
   }
 }
 @media (max-width: 767px) {
-  .tabs{
+  .tabs {
     padding-top: 15px;
     border: 1px solid rgba(17, 14, 187, 0.214);
     border-radius: 8px;
@@ -456,7 +469,7 @@ onBeforeUnmount(() => {
     overflow-x: hidden;
   }
 
-  .slider-wrapper{
+  .slider-wrapper {
     border-radius: 17px;
   }
 

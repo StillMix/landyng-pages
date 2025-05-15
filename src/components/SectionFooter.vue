@@ -1,9 +1,8 @@
 <template>
   <footer class="site-footer">
     <div class="footer-container">
-
       <div class="footer-column logo-column">
-        <img src="@/assets/icons/logo2.png" alt="ONR Курск" class="footer-logo">
+        <img src="@/assets/icons/logo2.png" alt="ONR Курск" class="footer-logo" />
         <p class="company-description">
           ООО "Оперативные и надежные решения" - разработка сложных IT-решений с 2022 года
         </p>
@@ -12,19 +11,19 @@
       <div class="footer-column contacts-column">
         <h3 class="footer-title">Контакты</h3>
         <div class="contact-item">
-          <img src="@/assets/icons/maps.png" alt="Адрес">
+          <img src="@/assets/icons/maps.png" alt="Адрес" />
           <span>305014, г. Курск, ул. Карла Маркса, 101 А</span>
         </div>
         <div class="contact-item">
-          <img src="@/assets/icons/telephone.png" alt="Телефон">
+          <img src="@/assets/icons/telephone.png" alt="Телефон" />
           <a href="tel:+79045206449">+7-904-520-64-49</a>
         </div>
         <div class="contact-item">
-          <img src="@/assets/icons/mail.png" alt="Email">
+          <img src="@/assets/icons/mail.png" alt="Email" />
           <a href="mailto:info@onr-kursk.ru">info@onr-kursk.ru</a>
         </div>
         <div class="contact-item">
-          <img src="@/assets/icons/mail2.png" alt="Email">
+          <img src="@/assets/icons/mail2.png" alt="Email" />
           <a href="mailto:mirgaleev@onr-kursk.ru">mirgaleev@onr-kursk.ru</a>
         </div>
       </div>
@@ -52,104 +51,106 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue'
 
-declare namespace ymaps {
-  interface MapConstructor {
-    ready(handler: () => void): void;
-  }
-
-  class Map {
-    constructor(element: string | HTMLElement, state: MapState);
-    geoObjects: GeoObjectCollection;
-  }
-
-  interface MapState {
-    center: number[];
-    zoom: number;
-    controls?: string[];
-  }
-
-  class Placemark {
-    constructor(geometry: number[], properties?: PlacemarkProperties, options?: PlacemarkOptions);
-  }
-
-  interface PlacemarkProperties {
-    hintContent?: string;
-    balloonContent?: string;
-  }
-
-  interface PlacemarkOptions {
-    iconLayout?: string;
-    iconImageHref?: string;
-    iconImageSize?: number[];
-    iconImageOffset?: number[];
-  }
-
-  interface GeoObjectCollection {
-    add(object: unknown): void;
-  }
+// Определяем типы для Яндекс.Карт без использования namespace
+export interface MapState {
+  center: number[]
+  zoom: number
+  controls?: string[]
 }
 
+export interface PlacemarkProperties {
+  hintContent?: string
+  balloonContent?: string
+}
+
+export interface PlacemarkOptions {
+  iconLayout?: string
+  iconImageHref?: string
+  iconImageSize?: number[]
+  iconImageOffset?: number[]
+}
+
+export interface GeoObjectCollection {
+  add(object: unknown): void
+}
+
+export interface YMap {
+  geoObjects: GeoObjectCollection
+}
+
+export interface YMaps {
+  ready(handler: () => void): void
+  Map: new (element: string | HTMLElement, state: MapState) => YMap
+  Placemark: new (
+    geometry: number[],
+    properties?: PlacemarkProperties,
+    options?: PlacemarkOptions,
+  ) => unknown
+}
+
+// Расширяем глобальный интерфейс Window
 declare global {
   interface Window {
-    ymaps: ymaps.MapConstructor & {
-      Map: typeof ymaps.Map;
-      Placemark: typeof ymaps.Placemark;
-    };
+    ymaps: YMaps
   }
 }
 
-const mapContainer = ref<HTMLElement | null>(null);
+const mapContainer = ref<HTMLElement | null>(null)
 
 const loadYandexMap = () => {
   if (window.ymaps) {
-    initMap();
-    return;
+    initMap()
+    return
   }
 
-  const script = document.createElement('script');
-  script.src = 'https://api-maps.yandex.ru/';
+  const script = document.createElement('script')
+  script.src = 'https://api-maps.yandex.ru/'
   script.onload = () => {
-    window.ymaps.ready(initMap);
-  };
-  document.head.appendChild(script);
-};
+    window.ymaps.ready(initMap)
+  }
+  document.head.appendChild(script)
+}
 
 const initMap = () => {
-  if (!mapContainer.value) return;
+  if (!mapContainer.value) return
 
-  const officeCoordinates: [number, number] = [51.792460, 36.165958];
+  const officeCoordinates: [number, number] = [51.79246, 36.165958]
 
   const map = new window.ymaps.Map(mapContainer.value, {
     center: officeCoordinates,
     zoom: 16,
-    controls: ['zoomControl']
-  });
+    controls: ['zoomControl'],
+  })
 
-  const placemark = new window.ymaps.Placemark(officeCoordinates, {
-    hintContent: 'ООО "Оперативные и надежные решения"',
-    balloonContent: '305014, г. Курск, ул. Карла Маркса, 101 А'
-  }, {
-    iconLayout: 'default#image',
-    iconImageHref: new URL('@/assets/icons/Yandex_Maps.png', import.meta.url).href,
-    iconImageSize: [30, 30],
-    iconImageOffset: [-15, -42]
-  });
+  const placemark = new window.ymaps.Placemark(
+    officeCoordinates,
+    {
+      hintContent: 'ООО "Оперативные и надежные решения"',
+      balloonContent: '305014, г. Курск, ул. Карла Маркса, 101 А',
+    },
+    {
+      iconLayout: 'default#image',
+      iconImageHref: new URL('@/assets/icons/Yandex_Maps.png', import.meta.url).href,
+      iconImageSize: [30, 30],
+      iconImageOffset: [-15, -42],
+    },
+  )
 
-  map.geoObjects.add(placemark);
-};
+  map.geoObjects.add(placemark)
+}
 
 onMounted(() => {
-  loadYandexMap();
-});
+  loadYandexMap()
+})
 </script>
 
 <style scoped lang="scss">
 @use '@/assets/styles/styles.scss';
 .site-footer {
   background: var(--bg-dark-section);
-  color: var( --color-text-white);
+  color: var(--color-text-white);
   padding: 60px 0 20px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
 }
@@ -227,7 +228,7 @@ onMounted(() => {
   text-align: center;
   padding-top: 30px;
   margin-top: 40px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 0.9rem;
   opacity: 0.7;
 }
