@@ -101,7 +101,7 @@
                 @click="switchToEmbed"
                 class="presentation-content__controls-btncontainer__zoomout control-button"
               >
-                <BackPreaentation :width="20" :height="20" fill="white" />
+                <ArrowBackPrezentation />
               </button>
               <button
                 @click="zoomOut"
@@ -140,7 +140,7 @@ import ZoomOut from '@/assets/icons/ZoomOut.vue'
 import ZoomIn from '@/assets/icons/ZoomIn.vue'
 import NewPageIcon from '@/assets/icons/NewPageIcon.vue'
 import usePdfViewer from '@/composables/usePdfViewer'
-import BackPreaentation from '@/assets/icons/BackPreaentation.vue'
+import ArrowBackPrezentation from '@/assets/icons/ArrowBackPrezentation.vue'
 
 const pdfSrc = '/src/assets/pdf/PresONR.pdf'
 const pdfjsWorkerSrc = '/pdfjs/build/pdf.worker.mjs'

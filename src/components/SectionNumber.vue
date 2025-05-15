@@ -128,6 +128,10 @@ const stats = [
   text-align: center;
   position: relative;
   transition: color 0.4s ease;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
 
   span {
     font-family: var(--font-family);
