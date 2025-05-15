@@ -1,6 +1,6 @@
 <!-- src/components/SectionCompanes.vue -->
 <template>
-  <div class="section-companes">
+  <div class="section-companies">
     <p class="section-title-light">Нам доверяют</p>
     <p class="section-subtitle">
       На протяжении 10+ лет мы создаем высокотехнологичные решения для организаций, где требования к
@@ -8,9 +8,9 @@
       может позволить себе компромиссов.
     </p>
     <AnimatedView>
-      <div class="section-companes__marquee" data-animation="fade-in">
-        <div class="section-companes__track">
-          <div class="section-companes__logos">
+      <div class="section-companies__marquee" data-animation="fade-in">
+        <div class="section-companies__track">
+          <div class="section-companies__logos">
             <img src="../assets/images/LogoCompanes/01.png" />
             <img src="../assets/images/LogoCompanes/02.png" />
             <img src="../assets/images/LogoCompanes/03.png" />
@@ -25,7 +25,7 @@
             <img src="../assets/images/LogoCompanes/12.png" />
             <img src="../assets/images/LogoCompanes/13.png" />
           </div>
-          <div class="section-companes__logos">
+          <div class="section-companies__logos">
             <img src="../assets/images/LogoCompanes/01.png" />
             <img src="../assets/images/LogoCompanes/02.png" />
             <img src="../assets/images/LogoCompanes/03.png" />
@@ -40,7 +40,7 @@
             <img src="../assets/images/LogoCompanes/12.png" />
             <img src="../assets/images/LogoCompanes/13.png" />
           </div>
-          <div class="section-companes__logos">
+          <div class="section-companies__logos">
             <img src="../assets/images/LogoCompanes/01.png" />
             <img src="../assets/images/LogoCompanes/02.png" />
             <img src="../assets/images/LogoCompanes/03.png" />
@@ -67,7 +67,7 @@ import AnimatedView from '@/components/AnimatedView.vue'
 
 <style lang="scss" scoped>
 @use '@/assets/styles/styles.scss';
-.section-companes {
+.section-companies {
   @include styles.section-light;
   height: var(--section-companes-height);
 

@@ -1,6 +1,6 @@
 <!-- src/components/SectionHowWork.vue -->
 <template>
-  <AppSection id="section-numbers" title="Как мы работаем" theme="light">
+  <AppSection id="section-howwork" title="Как мы работаем" theme="light">
     <AnimatedView>
       <div class="section-howWork-cards" data-animation="fade-in-up">
         <img class="section-howWork-cards__img" src="../assets/images/SectionHowWorkImgBck.png" />
