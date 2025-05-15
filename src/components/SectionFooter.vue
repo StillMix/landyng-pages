@@ -106,7 +106,7 @@ const loadYandexMap = () => {
   }
 
   const script = document.createElement('script')
-  script.src = 'https://api-maps.yandex.ru/'
+  script.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU'
   script.onload = () => {
     window.ymaps.ready(initMap)
   }
