@@ -55,16 +55,43 @@ const menuItems = [
 const scrollToSection = (sectionId: string) => {
   const section = document.getElementById(sectionId)
   if (section) {
-    section.scrollIntoView({ behavior: 'smooth' })
+    // Вместо простого scrollIntoView вычислим позицию скролла вручную
+    const sectionRect = section.getBoundingClientRect()
+    const sectionTop = window.pageYOffset + sectionRect.top
+    const windowHeight = window.innerHeight
+    const sectionHeight = sectionRect.height
+
+    // Вычисляем желаемую позицию:
+    // Если секция меньше высоты окна - центрируем её
+    // Если больше - позиционируем так, чтобы верх секции был немного ниже верха окна
+    const scrollPosition =
+      sectionHeight < windowHeight
+        ? sectionTop - (windowHeight - sectionHeight) / 2 // центрируем по вертикали
+        : sectionTop - 100 // отступ 100px от верха окна
+
+    // Плавно скроллим к вычисленной позиции
+    window.scrollTo({
+      top: scrollPosition,
+      behavior: 'smooth',
+    })
   }
 }
 
 // Определяем текущую секцию и стиль меню в зависимости от положения скролла
 const handleScroll = () => {
   const scrollPosition = window.scrollY + window.innerHeight / 2
-  const sections = document.querySelectorAll(
-    'section, .section-main, .section-contact, .section-decisions, .section-prezentation, .section-companes',
-  )
+
+  // Получаем все секции по их ID или классам
+  const sections = [
+    document.getElementById('section-about'),
+    document.getElementById('section-numbers'),
+    document.getElementById('section-howwork'),
+    document.getElementById('section-contact'),
+    document.querySelector('.section-companies'), // Используем класс вместо ID
+    document.getElementById('section-decisions'),
+    document.querySelector('.section-prezentation'), // Используем класс вместо ID
+    document.querySelector('.section-main'), // Добавляем главную секцию
+  ].filter(Boolean) // Фильтруем null значения
 
   // Проверяем, находимся ли мы в главной секции
   const mainSection = document.querySelector('.section-main')
@@ -75,55 +102,52 @@ const handleScroll = () => {
 
   // Определяем активную секцию
   let foundActiveSection = false
-  sections.forEach((section) => {
+
+  // Перебираем секции в обратном порядке, чтобы найти ту, в которой мы находимся
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const section = sections[i]
+    if (!section) continue
+
     const sectionTop = section.getBoundingClientRect().top + window.scrollY
     const sectionBottom = sectionTop + section.getBoundingClientRect().height
-    console.log('section: ', section)
-    console.log('sectionTop: ', sectionTop)
-    console.log('sectionBottom: ', sectionBottom)
 
     if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
-      // Определяем цвет фона текущей секции
-      const computedStyle = window.getComputedStyle(section)
-      const backgroundColor = computedStyle.backgroundColor
-      console.log('computedStyle: ', computedStyle)
-      console.log('backgroundColor: ', backgroundColor)
-      console.log('isDarkSection.value : ', isDarkSection.value)
-      // Проверяем, является ли секция темной
-      isDarkSection.value = isDarkBg(backgroundColor, section)
-      console.log('isDarkSection.value: ', isDarkSection.value)
+      // Определяем темная ли секция
+      isDarkSection.value = isDarkBg(section)
+
       // Обновляем активный пункт меню
       if (!foundActiveSection) {
-        const sectionId = section.id || ''
         menuItems.forEach((item, idx) => {
-          if (sectionId.includes(item.section)) {
+          // Проверяем ID секции или className на совпадение с item.section
+          const sectionId = section.id || ''
+          const sectionClass = section.className || ''
+
+          if (sectionId.includes(item.section) || sectionClass.includes(item.section)) {
             activeIndex.value = idx
             foundActiveSection = true
           }
         })
       }
+
+      break // Выходим из цикла, как только нашли активную секцию
     }
-  })
+  }
 }
 
-// Функция для определения тёмного фона
-const isDarkBg = (bgColor: string, element: Element): boolean => {
-  // Проверяем наличие класса, указывающего на тёмный фон
-  if (
-    element.classList.contains('section-dark') ||
-    element.classList.contains('section-contact') ||
-    element.classList.contains('section-numbers') ||
-    element.classList.contains('section-decisions')
-  ) {
-    return true
-  }
-
-  // Проверяем по цвету фона
-  if (bgColor.includes('rgba(30, 41, 59') || bgColor.includes('rgb(15, 23, 42)')) {
-    return true
-  }
-
-  return false
+// Упрощаем функцию определения темного фона
+const isDarkBg = (element: Element): boolean => {
+  // Проверяем секции, которые должны быть темными
+  return (
+    element.id === 'section-numbers' ||
+    element.id === 'section-contact' ||
+    element.id === 'section-decisions' ||
+    (element.className &&
+      (element.className.includes('section-dark') ||
+        element.className.includes('section-contact') ||
+        element.className.includes('section-numbers') ||
+        element.className.includes('section-decisions') ||
+        element.className.includes('section-main')))
+  )
 }
 
 onMounted(() => {
