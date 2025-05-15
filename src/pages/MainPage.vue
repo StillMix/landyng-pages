@@ -7,6 +7,7 @@
   <SectionCompanes />
   <SectionDecisions />
   <SectionPrezentation />
+  <SectionFooter />
 </template>
 
 <script setup lang="ts">
@@ -18,6 +19,7 @@ import SectionHowWork from '@/components/SectionHowWork.vue'
 import SectionAboutUs from '@/components/SectionAboutUs.vue'
 import SectionCompanes from '@/components/SectionCompanes.vue'
 import SectionDecisions from '@/components/SectionDecisions.vue'
+import SectionFooter from '@/components/SectionFooter.vue'
 </script>
 
 <style lang="scss" scoped></style>
