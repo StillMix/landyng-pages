@@ -134,20 +134,24 @@ const handleScroll = () => {
   }
 }
 
-// Упрощаем функцию определения темного фона
+// Измените функцию isDarkBg в AppMenu.vue
 const isDarkBg = (element: Element): boolean => {
   // Проверяем секции, которые должны быть темными
-  return (
-    element.id === 'section-numbers' ||
-    element.id === 'section-contact' ||
-    element.id === 'section-decisions' ||
-    (element.className &&
-      (element.className.includes('section-dark') ||
-        element.className.includes('section-contact') ||
-        element.className.includes('section-numbers') ||
-        element.className.includes('section-decisions') ||
-        element.className.includes('section-main')))
-  )
+  if (element.id) {
+    return ['section-numbers', 'section-contact', 'section-decisions'].includes(element.id)
+  }
+
+  if (element.className && typeof element.className === 'string') {
+    return (
+      element.className.includes('section-dark') ||
+      element.className.includes('section-contact') ||
+      element.className.includes('section-numbers') ||
+      element.className.includes('section-decisions') ||
+      element.className.includes('section-main')
+    )
+  }
+
+  return false
 }
 
 onMounted(() => {

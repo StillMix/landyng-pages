@@ -1,5 +1,5 @@
 <template>
-  <div class="section-prezentation">
+  <div class="section-prezentation" id="section-prezentation">
     <AppTitle theme="light">Презентация</AppTitle>
     <div class="presentation-container">
       <div class="presentation-content">

@@ -1,6 +1,6 @@
 <!-- src/components/SectionCompanes.vue -->
 <template>
-  <div class="section-companies">
+  <div class="section-companies" id="section-companies">
     <p class="section-title-light">Нам доверяют</p>
     <p class="section-subtitle">
       На протяжении 10+ лет мы создаем высокотехнологичные решения для организаций, где требования к
