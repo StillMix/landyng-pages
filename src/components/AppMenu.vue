@@ -2,10 +2,9 @@
   <div
     class="menu"
     :class="{
-      'menu--dark': isDarkSection,
-      'menu--light': !isDarkSection,
       'menu--hidden': isMainSection,
     }"
+    :style="menuStyle"
   >
     <button
       v-for="(item, index) in menuItems"
@@ -13,23 +12,17 @@
       class="menu__btn"
       :class="{
         'menu__btn--active': activeIndex === index,
-        'menu__btn--dark': !isDarkSection,
-        'menu__btn--light': isDarkSection,
       }"
+      :style="buttonStyle"
       @click="scrollToSection(item.section)"
     >
-      <component
-        :is="item.icon"
-        width="24"
-        height="24"
-        :fill="isDarkSection ? '#0f172a' : 'white'"
-      />
+      <component :is="item.icon" width="24" height="24" :fill="iconColor" />
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import CompaniesIcon from '@/assets/icons/MenuIcon/CompaniesIcon.vue'
 import ContactIcon from '@/assets/icons/MenuIcon/ContactIcon.vue'
 import DecisionsIcon from '@/assets/icons/MenuIcon/DecisionsIcon.vue'
@@ -41,6 +34,7 @@ import WhyWeIcon from '@/assets/icons/MenuIcon/WhyWeIcon.vue'
 const activeIndex = ref(0)
 const isDarkSection = ref(false)
 const isMainSection = ref(true)
+const transitionProgress = ref(0) // 0 = светлый, 1 = темный
 
 const menuItems = [
   { icon: WhyWeIcon, section: 'section-about' },
@@ -52,24 +46,49 @@ const menuItems = [
   { icon: PrezentationIcon, section: 'section-prezentation' },
 ]
 
+const menuStyle = computed(() => {
+  // Интерполируем цвета фона в зависимости от значения transitionProgress
+  const darkBgOpacity = 0.8 * transitionProgress.value
+
+
+  return {
+    background: `rgba(15, 23, 42, ${darkBgOpacity})`,
+    boxShadow: `0 4px 15px rgba(0, 0, 0, ${0.1 + 0.05 * transitionProgress.value})`,
+    borderColor: `rgba(255, 255, 255, ${0.1 * transitionProgress.value})`,
+  }
+})
+
+const buttonStyle = computed(() => {
+  return {
+    background:
+      transitionProgress.value > 0.5 ? 'rgba(255, 255, 255, 0.9)' : 'rgba(15, 23, 42, 0.9)',
+    boxShadow:
+      transitionProgress.value > 0.5
+        ? '0 2px 10px rgba(0, 0, 0, 0.1)'
+        : '0 2px 8px rgba(0, 0, 0, 0.2)',
+  }
+})
+
+const iconColor = computed(() => {
+  return transitionProgress.value > 0.5 ? '#0f172a' : 'white'
+})
+
 const scrollToSection = (sectionId: string) => {
   const section = document.getElementById(sectionId)
   if (section) {
-    // Вместо простого scrollIntoView вычислим позицию скролла вручную
+    // Вычисляем позицию для плавного скролла
     const sectionRect = section.getBoundingClientRect()
     const sectionTop = window.pageYOffset + sectionRect.top
     const windowHeight = window.innerHeight
     const sectionHeight = sectionRect.height
 
-    // Вычисляем желаемую позицию:
-    // Если секция меньше высоты окна - центрируем её
-    // Если больше - позиционируем так, чтобы верх секции был немного ниже верха окна
+    // Позиционируем секцию в зависимости от её высоты
     const scrollPosition =
       sectionHeight < windowHeight
-        ? sectionTop - (windowHeight - sectionHeight) / 2 // центрируем по вертикали
-        : sectionTop - 100 // отступ 100px от верха окна
+        ? sectionTop - (windowHeight - sectionHeight) / 2
+        : sectionTop - 100
 
-    // Плавно скроллим к вычисленной позиции
+    // Плавно скроллим
     window.scrollTo({
       top: scrollPosition,
       behavior: 'smooth',
@@ -77,66 +96,86 @@ const scrollToSection = (sectionId: string) => {
   }
 }
 
-// Определяем текущую секцию и стиль меню в зависимости от положения скролла
+// Обновленная функция обработки скролла с плавным переходом
 const handleScroll = () => {
   const scrollPosition = window.scrollY + window.innerHeight / 2
 
-  // Получаем все секции по их ID или классам
+  // Получаем все секции
   const sections = [
     document.getElementById('section-about'),
     document.getElementById('section-numbers'),
     document.getElementById('section-howwork'),
     document.getElementById('section-contact'),
-    document.querySelector('.section-companies'), // Используем класс вместо ID
+    document.querySelector('.section-companies'),
     document.getElementById('section-decisions'),
-    document.querySelector('.section-prezentation'), // Используем класс вместо ID
-    document.querySelector('.section-main'), // Добавляем главную секцию
-  ].filter(Boolean) // Фильтруем null значения
+    document.querySelector('.section-prezentation'),
+    document.querySelector('.section-main'),
+  ].filter(Boolean) as Element[]
 
-  // Проверяем, находимся ли мы в главной секции
+  // Проверяем, находимся ли в главной секции
   const mainSection = document.querySelector('.section-main')
   if (mainSection) {
     const mainSectionBottom = mainSection.getBoundingClientRect().bottom + window.scrollY
     isMainSection.value = scrollPosition < mainSectionBottom
   }
 
-  // Определяем активную секцию
-  let foundActiveSection = false
+  // Определяем, в какой секции находимся и на каком расстоянии от границ
+  for (let i = 0; i < sections.length - 1; i++) {
+    const currentSection = sections[i]
+    const nextSection = sections[i + 1]
 
-  // Перебираем секции в обратном порядке, чтобы найти ту, в которой мы находимся
-  for (let i = sections.length - 1; i >= 0; i--) {
-    const section = sections[i]
-    if (!section) continue
+    if (!currentSection || !nextSection) continue
 
-    const sectionTop = section.getBoundingClientRect().top + window.scrollY
-    const sectionBottom = sectionTop + section.getBoundingClientRect().height
+    const currentSectionTop = currentSection.getBoundingClientRect().top + window.scrollY
+    const currentSectionBottom = currentSectionTop + currentSection.getBoundingClientRect().height
+    const nextSectionTop = nextSection.getBoundingClientRect().top + window.scrollY
 
-    if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
-      // Определяем темная ли секция
-      isDarkSection.value = isDarkBg(section)
+    // Если мы находимся между двумя секциями (в зоне перехода)
+    if (scrollPosition >= currentSectionBottom - 100 && scrollPosition <= nextSectionTop + 100) {
+      const currentIsDark = isDarkBg(currentSection)
+      const nextIsDark = isDarkBg(nextSection)
 
-      // Обновляем активный пункт меню
-      if (!foundActiveSection) {
-        menuItems.forEach((item, idx) => {
-          // Проверяем ID секции или className на совпадение с item.section
-          const sectionId = section.id || ''
-          const sectionClass = section.className || ''
+      // Если секции разного типа, рассчитываем прогресс перехода
+      if (currentIsDark !== nextIsDark) {
+        // Рассчитываем прогресс перехода (от 0 до 1)
+        const transitionZone = 200 // 200px зона перехода
+        const progress = (scrollPosition - (currentSectionBottom - 100)) / transitionZone
 
-          if (sectionId.includes(item.section) || sectionClass.includes(item.section)) {
-            activeIndex.value = idx
-            foundActiveSection = true
-          }
-        })
+        // Устанавливаем прогресс перехода в зависимости от типа секций
+        if (currentIsDark && !nextIsDark) {
+          // Переход от темной к светлой
+          transitionProgress.value = 1 - Math.max(0, Math.min(1, progress))
+        } else {
+          // Переход от светлой к темной
+          transitionProgress.value = Math.max(0, Math.min(1, progress))
+        }
+
+        break // Нашли переход, выходим из цикла
       }
+    }
 
-      break // Выходим из цикла, как только нашли активную секцию
+    // Если находимся полностью внутри секции
+    if (scrollPosition >= currentSectionTop + 100 && scrollPosition <= currentSectionBottom - 100) {
+      isDarkSection.value = isDarkBg(currentSection)
+      transitionProgress.value = isDarkSection.value ? 1 : 0
+
+      // Определяем активный пункт меню
+      menuItems.forEach((item, idx) => {
+        const sectionId = currentSection.id || ''
+        const sectionClass = currentSection.className || ''
+
+        if (sectionId.includes(item.section) || sectionClass.includes(item.section)) {
+          activeIndex.value = idx
+        }
+      })
+
+      break
     }
   }
 }
 
-// Измените функцию isDarkBg в AppMenu.vue
+// Функция определения типа фона секции
 const isDarkBg = (element: Element): boolean => {
-  // Проверяем секции, которые должны быть темными
   if (element.id) {
     return ['section-numbers', 'section-contact', 'section-decisions'].includes(element.id)
   }
@@ -179,21 +218,17 @@ onUnmounted(() => {
   left: 30px;
   top: 50%;
   transform: translateY(-50%);
-  transition: all 0.3s ease;
+  transition:
+    background 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.4s ease,
+    opacity 0.3s ease;
+  backdrop-filter: blur(8px);
+  border: 1px solid transparent;
 
   &--hidden {
     opacity: 0;
     pointer-events: none;
-  }
-
-  &--light {
-    background: rgba(15, 23, 42, 0.8); // Тёмный фон с прозрачностью
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-
-  &--dark {
-    background: rgba(255, 255, 255, 0.8); // Светлый фон с прозрачностью
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   }
 
   &__btn {
@@ -203,15 +238,19 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
     border: none;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 0.4s ease,
+      box-shadow 0.4s ease;
     border-radius: 50%;
     padding: 22px;
     position: relative;
+
     svg {
       flex-shrink: 0;
+      transition: fill 0.4s ease;
     }
 
     &:hover {
@@ -232,16 +271,6 @@ onUnmounted(() => {
         background: rgba(59, 130, 246, 0.3);
         animation: pulse 1.5s infinite;
       }
-    }
-
-    &--light {
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    &--dark {
-      background: rgba(15, 23, 42, 0.9);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
   }
 }
