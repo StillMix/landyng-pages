@@ -168,7 +168,7 @@ onUnmounted(() => {
 .menu {
   z-index: 10;
   border-radius: 52px;
-  width: 48px;
+  width: 62px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -208,8 +208,11 @@ onUnmounted(() => {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50%;
-    padding: 0;
+    padding: 22px;
     position: relative;
+    svg {
+      flex-shrink: 0;
+    }
 
     &:hover {
       transform: scale(1.2);
@@ -217,8 +220,8 @@ onUnmounted(() => {
 
     &--active {
       border-radius: 100%;
-      width: 44px;
-      height: 44px;
+      width: 58px;
+      height: 58px;
 
       &::after {
         content: '';
