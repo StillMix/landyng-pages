@@ -236,6 +236,10 @@ const isSubmitting = ref(false)
 const submitSuccess = ref(false)
 const submitError = ref(false)
 
+// URL вебхука Mattermost - через прокси
+const webhookId = '1r3w3t778b8cpdshnsygpdghec'
+const mattermostWebhookUrl = `/api/mattermost/${webhookId}`
+
 // Проверка валидности формы
 const isFormValid = computed(() => {
   return (
@@ -291,17 +295,71 @@ const validateAgreement = () => {
   return true
 }
 
-// Обработка отправки формы
+const sendToMattermost = async (formData: typeof formState) => {
+  try {
+    const message = {
+      text: '### Новая заявка с сайта',
+      username: 'Форма обратной связи',
+      attachments: [
+        {
+          color: '#3B82F6',
+          fields: [
+            {
+              short: true,
+              title: 'Имя',
+              value: formData.name,
+            },
+            {
+              short: true,
+              title: 'Телефон',
+              value: formData.phone,
+            },
+            {
+              short: true,
+              title: 'Email',
+              value: formData.email,
+            },
+            {
+              short: false,
+              title: 'Сообщение',
+              value: formData.message || 'Сообщение не указано',
+            },
+          ],
+          footer: 'Отправлено через форму на сайте ONR-Курск',
+          ts: Math.floor(Date.now() / 1000), // Текущее время в формате UNIX timestamp
+        },
+      ],
+    }
+
+    console.log('Отправка в Mattermost:', mattermostWebhookUrl)
+
+    const response = await fetch(mattermostWebhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`)
+    }
+
+    return true
+  } catch (error) {
+    console.error('Ошибка при отправке данных в Mattermost:', error)
+    return false
+  }
+}
+
 const handleSubmit = async (e: Event) => {
   e.preventDefault()
 
-  // Валидируем все поля
   const isNameValid = validateName()
   const isPhoneValid = validatePhone()
   const isEmailValid = validateEmail()
   const isAgreementValid = validateAgreement()
 
-  // Если есть ошибки, прерываем отправку
   if (!isNameValid || !isPhoneValid || !isEmailValid || !isAgreementValid) {
     return
   }
@@ -309,23 +367,35 @@ const handleSubmit = async (e: Event) => {
   try {
     isSubmitting.value = true
 
-    // Имитация отправки формы
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    console.log('Отправка формы...')
 
-    // Успешная отправка
-    submitSuccess.value = true
-    formState.submitted = true
+    const success = await sendToMattermost({
+      name: formState.name,
+      phone: formState.phone,
+      email: formState.email,
+      message: formState.message,
+      agreement: formState.agreement,
+      submitted: false,
+    })
 
-    // Сбрасываем форму после успешной отправки
-    setTimeout(() => {
-      formState.name = ''
-      formState.phone = ''
-      formState.email = ''
-      formState.message = ''
-      formState.agreement = false
-      formState.submitted = false
-      submitSuccess.value = false
-    }, 3000)
+    if (success) {
+      console.log('Успешная отправка в Mattermost')
+
+      submitSuccess.value = true
+      formState.submitted = true
+
+      setTimeout(() => {
+        formState.name = ''
+        formState.phone = ''
+        formState.email = ''
+        formState.message = ''
+        formState.agreement = false
+        formState.submitted = false
+        submitSuccess.value = false
+      }, 5000)
+    } else {
+      throw new Error('Ошибка при отправке сообщения')
+    }
   } catch (error) {
     console.error('Ошибка при отправке формы:', error)
     submitError.value = true
@@ -333,7 +403,7 @@ const handleSubmit = async (e: Event) => {
     // Сбрасываем ошибку через некоторое время
     setTimeout(() => {
       submitError.value = false
-    }, 3000)
+    }, 5000)
   } finally {
     isSubmitting.value = false
   }
