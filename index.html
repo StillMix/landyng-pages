@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <script src="/pdfjs/pdf.mjs" type="module"></script>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vite App</title>
+    
+    <!-- Используем обычный script, а не module для PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    
+    <!-- Настраиваем воркер PDF.js после загрузки библиотеки -->
+    <script>
+      // Устанавливаем путь к воркеру сразу после загрузки библиотеки
+      if (window.pdfjsLib) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+    </script>
   </body>
 </html>

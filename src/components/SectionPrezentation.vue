@@ -142,8 +142,8 @@ import NewPageIcon from '@/assets/icons/NewPageIcon.vue'
 import usePdfViewer from '@/composables/usePdfViewer'
 import ArrowBackPrezentation from '@/assets/icons/ArrowBackPrezentation.vue'
 
-const pdfSrc = './PresONR.pdf'
-const pdfjsWorkerSrc = '/pdfjs/pdf.worker.mjs'
+// Упрощаем путь к PDF, без указания worker
+const pdfSrc = '/PresONR.pdf'
 
 const {
   displayMode,
@@ -161,7 +161,7 @@ const {
   zoomIn,
   zoomOut,
   downloadPdf,
-} = usePdfViewer(pdfSrc, pdfjsWorkerSrc)
+} = usePdfViewer(pdfSrc)
 </script>
 
 <style lang="scss" scoped>

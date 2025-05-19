@@ -1,11 +1,12 @@
-import { ref, computed, onUnmounted, onMounted, watch } from 'vue'
+import { ref, computed, onUnmounted, watch } from 'vue'
 import type { PDFDocumentProxy } from '@/types/pdf'
 
-export default function usePdfViewer(pdfSrc: string, pdfjsWorkerSrc: string) {
+export default function usePdfViewer(pdfSrc: string) {
   const displayMode = ref<'preview' | 'embed'>('preview')
   const pdfContainer = ref<HTMLDivElement | null>(null)
   const pdfCanvas = ref<HTMLCanvasElement | null>(null)
   const loading = ref(true)
+  const error = ref(false)
 
   // PDF состояние
   let pdfDoc: PDFDocumentProxy | null = null
@@ -20,44 +21,6 @@ export default function usePdfViewer(pdfSrc: string, pdfjsWorkerSrc: string) {
     const percentage = ((currentPage.value - 1) / (pageCount.value - 1)) * 100
     // Округляем до целого числа
     return Math.round(percentage)
-  })
-
-  const loadPdfJsLibrary = () => {
-    return new Promise((resolve, reject) => {
-      if (window.pdfjsLib) {
-        console.log('PDF.js уже загружен')
-        resolve(true)
-        return
-      }
-
-      const script = document.createElement('script')
-      script.src = '/pdfjs/pdf.mjs'
-      script.type = 'module'
-      script.onload = () => {
-        console.log('PDF.js загружен динамически')
-        // Небольшая задержка для инициализации библиотеки
-        setTimeout(() => resolve(true), 500)
-      }
-      script.onerror = (error) => {
-        console.error('Ошибка загрузки PDF.js:', error)
-        reject(error)
-      }
-
-      document.head.appendChild(script)
-    })
-  }
-
-  // Вызываем перед использованием PDF.js
-  onMounted(async () => {
-    if (displayMode.value === 'embed') {
-      try {
-        await loadPdfJsLibrary()
-        // Теперь PDF.js должен быть загружен
-        loadPdf()
-      } catch (error) {
-        console.error('Не удалось загрузить PDF.js:', error)
-      }
-    }
   })
 
   const renderPage = async (pageNum: number) => {
@@ -77,6 +40,12 @@ export default function usePdfViewer(pdfSrc: string, pdfjsWorkerSrc: string) {
 
       const canvas = pdfCanvas.value
       const context = canvas.getContext('2d')
+
+      // Проверяем, что context не null
+      if (!context) {
+        console.error('Не удалось получить 2D контекст из canvas')
+        return
+      }
 
       // Добавляем класс для анимации
       canvas.classList.add('page-transition')
@@ -109,8 +78,8 @@ export default function usePdfViewer(pdfSrc: string, pdfjsWorkerSrc: string) {
           canvas.style.transform = 'scale(1)'
         }
       }, 50)
-    } catch (error) {
-      console.error('Ошибка при рендеринге страницы:', error)
+    } catch (err) {
+      console.error('Ошибка при рендеринге страницы:', err)
     }
   }
 
@@ -118,37 +87,38 @@ export default function usePdfViewer(pdfSrc: string, pdfjsWorkerSrc: string) {
   const loadPdf = async () => {
     try {
       loading.value = true
-      console.log('Загрузка PDF:', pdfSrc, 'Worker:', pdfjsWorkerSrc)
+      error.value = false
+      console.log('Загрузка PDF:', pdfSrc)
 
-      // Проверяем, загружена ли библиотека
+      // Проверяем доступность библиотеки
       if (!window.pdfjsLib) {
-        console.error('PDF.js не загружен, проверьте подключение скрипта в index.html')
+        console.error('PDF.js не загружен через CDN. Проверьте подключение в index.html')
+        error.value = true
         loading.value = false
         return
       }
 
-      // Настраиваем путь к воркеру
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerSrc
-      console.log('Worker установлен:', pdfjsWorkerSrc)
-
-      // Загружаем PDF
+      // Создаем задачу загрузки PDF
       const loadingTask = window.pdfjsLib.getDocument(pdfSrc)
-      console.log('Задача загрузки создана')
 
-      loadingTask.promise.catch((error) => {
-        console.error('Ошибка при загрузке PDF (промис):', error)
-      })
+      try {
+        pdfDoc = await loadingTask.promise
+        console.log('PDF загружен успешно, страниц:', pdfDoc.numPages)
 
-      pdfDoc = await loadingTask.promise
-      console.log('PDF загружен успешно, страниц:', pdfDoc.numPages)
+        pageCount.value = pdfDoc.numPages
+        currentPage.value = 1
 
-      pageCount.value = pdfDoc.numPages
-      currentPage.value = 1
-
-      await renderPage(currentPage.value)
-      loading.value = false
-    } catch (error) {
-      console.error('Ошибка при загрузке PDF:', error)
+        await renderPage(currentPage.value)
+        error.value = false
+        loading.value = false
+      } catch (loadError) {
+        console.error('Ошибка при загрузке PDF документа:', loadError)
+        error.value = true
+        loading.value = false
+      }
+    } catch (err) {
+      console.error('Ошибка при загрузке PDF:', err)
+      error.value = true
       loading.value = false
     }
   }
@@ -226,28 +196,15 @@ export default function usePdfViewer(pdfSrc: string, pdfjsWorkerSrc: string) {
     await renderPage(currentPage.value)
   }
 
-  // Модифицируйте switchToEmbed
-  const switchToEmbed = async () => {
+  const switchToEmbed = () => {
     displayMode.value = displayMode.value === 'embed' ? 'preview' : 'embed'
-
-    // Если переключаемся в режим встроенного просмотра
-    if (displayMode.value === 'embed') {
-      try {
-        // Убедимся, что библиотека загружена
-        await loadPdfJsLibrary()
-        // Даем время DOM обновиться перед загрузкой PDF
-        setTimeout(loadPdf, 100)
-      } catch (error) {
-        console.error('Ошибка при загрузке PDF.js:', error)
-      }
-    }
   }
 
   // Загрузка PDF при переключении режима
   watch(displayMode, async (newMode) => {
     if (newMode === 'embed') {
       // Даем время DOM обновиться перед загрузкой PDF
-      setTimeout(loadPdf, 50)
+      setTimeout(loadPdf, 100)
     }
   })
 
@@ -274,6 +231,7 @@ export default function usePdfViewer(pdfSrc: string, pdfjsWorkerSrc: string) {
     displayMode,
     pdfCanvas,
     loading,
+    error,
     pageCount,
     currentPage,
     lineWidthPercentage,
