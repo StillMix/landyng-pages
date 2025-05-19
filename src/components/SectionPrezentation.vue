@@ -142,8 +142,8 @@ import NewPageIcon from '@/assets/icons/NewPageIcon.vue'
 import usePdfViewer from '@/composables/usePdfViewer'
 import ArrowBackPrezentation from '@/assets/icons/ArrowBackPrezentation.vue'
 
-const pdfSrc = '/src/assets/pdf/PresONR.pdf'
-const pdfjsWorkerSrc = '/pdfjs/build/pdf.worker.mjs'
+const pdfSrc = './PresONR.pdf'
+const pdfjsWorkerSrc = '/pdfjs/pdf.worker.mjs'
 
 const {
   displayMode,
