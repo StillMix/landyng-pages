@@ -156,7 +156,7 @@ onMounted(() => {
 }
 
 .footer-container {
-  max-width: 1360px;
+  max-width: 1660px;
   margin: 0 auto;
   padding: 0 20px;
   display: grid;

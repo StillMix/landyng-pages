@@ -40,15 +40,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-// const emit = defineEmits<{
-//   (e: 'onClick', value: any): void
-// }>()
-
-// const handleClick = (event: MouseEvent) => {
-//   emit('onClick', event)
-//   window.open('http://onr-kursk.ru/assets/PresONR.pdf')
-// }
-
 interface Tab {
   title: string
   description: string
@@ -153,6 +144,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/styles/styles.scss';
 .inner-wrapper {
   height: auto;
   min-height: 80vh;
@@ -160,6 +152,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  font-family: var(--font-family);
   background-image: var(--bg-primary);
   padding: 20px 0;
   overflow-x: hidden;
@@ -238,10 +231,9 @@ onBeforeUnmount(() => {
     font-size: 0.9rem;
     padding: 8px 12px;
     cursor: pointer;
-    color: var(--text-main);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 12px;
     transition: color 0.3s ease;
     text-align: left;
     border-radius: 8px;
@@ -251,12 +243,17 @@ onBeforeUnmount(() => {
     &.active {
       color: #000;
       border-left: none;
-      border-bottom: 2px solid #0000b8;
-      background-color: #0011ff59;
+      border-bottom: 2px solid #3B82F6;
+      background-color: #3b83f638;
       transition:
         color 0.7s ease,
         border-bottom 0.1s ease,
         background-color 0.7s ease;
+
+        .tab-icon-placeholder {
+          transition: 0.5s;
+          background: #3B82F6;
+        }
     }
 
     &:hover {
@@ -267,7 +264,7 @@ onBeforeUnmount(() => {
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: #ccc;
+      background: #cccccc;
       display: inline-block;
       flex-shrink: 0;
     }
@@ -360,6 +357,7 @@ onBeforeUnmount(() => {
 
 @media (min-width: 768px) {
   .inner-wrapper {
+    font-family: var(--font-family);
     height: 1000px;
     padding: 40px 0;
   }
@@ -378,16 +376,15 @@ onBeforeUnmount(() => {
     flex-direction: row;
     height: auto;
     max-height: 900px;
-    padding: 45px 25px;
+    padding: 45px 25px 45px 0px;
     border-radius: 17px;
     box-shadow: 0 8px 26px rgba(0, 0, 0, 0.1);
   }
 
   .tabs {
     flex-direction: column;
-    gap: 15px;
+    gap: 0px;
     width: 30%;
-    padding-right: 10px;
     overflow-y: auto;
     overflow-x: hidden;
     margin-bottom: 0;
@@ -396,13 +393,15 @@ onBeforeUnmount(() => {
 
     .tab-button {
       font-size: 1.1rem;
-      padding: 10px 15px;
       white-space: normal;
       text-align: left;
+      border-left: 3px solid #00000000;
+      padding: 25px 0px 25px 15px;
 
       &.active {
-        border-left: 2px solid #0000b8;
+        border-left: 3px solid #3B82F6;
         border-bottom: none;
+        border-radius: 0px;
       }
     }
   }
